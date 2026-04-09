@@ -1,4 +1,4 @@
-import { ClipboardList, FileText, MessageSquare, CheckCircle } from 'lucide-react';
+import { ClipboardList, FileText, MessageSquare, CheckCircle, FileUp } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const navItems = [
@@ -15,8 +15,16 @@ const steps = [
   { step: 4, label: '리뷰 확정' },
 ];
 
+export interface RfpDocInfo {
+  fileName: string;
+  client: string;
+  docType: string;
+  status: '업로드 전' | '분석 중' | '분석 완료' | '확정';
+}
+
 interface AppSidebarProps {
   currentStep?: number;
+  rfpDoc?: RfpDocInfo | null;
 }
 
 export function AppSidebar({ currentStep = 1 }: AppSidebarProps) {
