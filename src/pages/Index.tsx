@@ -28,6 +28,8 @@ function deepClone<T>(obj: T): T {
 
 export default function Index() {
   const navigate = useNavigate();
+  // TODO: API 연동 시 아래로 교체
+  // const { data } = await fetch('/api/reference').then(r => r.json());
   const [data, setData] = useState<ReferenceData>(() => deepClone(mockReferenceData));
   const [originalData] = useState<ReferenceData>(() => deepClone(mockReferenceData));
   const [activeTab, setActiveTab] = useState('effort');
@@ -61,6 +63,8 @@ export default function Index() {
     handleSave();
     toast.success('기준자료 확정', { description: 'Step 2로 이동합니다.' });
     navigate('/rfp-analysis');
+    // TODO: API 연동 시 아래로 교체
+    // await fetch('/api/reference/confirm', { method: 'POST' });
   };
 
   const handleConfirmClick = () => {

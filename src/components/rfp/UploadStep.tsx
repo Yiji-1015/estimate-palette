@@ -5,6 +5,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 
 interface UploadStepProps {
   onStartAnalysis: (file: { name: string; size: number; type: string }, docType: string) => void;
+  // TODO: API 연동 시 아래로 교체
+  // onStartAnalysis → POST /api/rfp/upload (multipart/form-data)로 파일 업로드 + 분석 시작
 }
 
 export function UploadStep({ onStartAnalysis }: UploadStepProps) {
