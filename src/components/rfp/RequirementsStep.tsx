@@ -126,6 +126,8 @@ export function RequirementsStep({ data, onChange }: RequirementsStepProps) {
     setConfirmOpen(false);
     toast.success('요구사항 확정', { description: '견적 산정으로 이동합니다.' });
     navigate('/estimation');
+    // TODO: API 연동 시 아래로 교체
+    // await fetch(`/api/rfp/${id}/confirm`, { method: 'POST' });
   };
 
   const handleSave = () => {
