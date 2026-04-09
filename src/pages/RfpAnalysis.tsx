@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { AppLayout } from '@/components/AppLayout';
 import { UploadStep } from '@/components/rfp/UploadStep';
 import { ScanStep } from '@/components/rfp/ScanStep';
 import { RequirementsStep } from '@/components/rfp/RequirementsStep';
 import { mockRfpAnalysis } from '@/data/mockRfpAnalysis';
 import type { RfpAnalysisData } from '@/types/rfpAnalysis';
+import type { RfpDocInfo } from '@/components/AppSidebar';
 import { Check } from 'lucide-react';
 
 // TODO: API 연동 시 아래로 교체
@@ -18,8 +19,22 @@ export default function RfpAnalysis() {
     JSON.parse(JSON.stringify(mockRfpAnalysis))
   );
 
+  const rfpDoc = useMemo<RfpDocInfo | null>(() => {
+    if (currentSubStep === 0) return null;
+    const statusMap: Record<number, RfpDocInfo['status']> = {
+      1: '분석 중',
+      2: '분석 완료',
+    };
+    return {
+      fileName: analysisData.meta.fileName,
+      client: analysisData.projectInfo.client,
+      docType: analysisData.meta.docType,
+      status: statusMap[currentSubStep] ?? '업로드 전',
+    };
+  }, [currentSubStep, analysisData]);
+
   return (
-    <AppLayout currentStep={2}>
+    <AppLayout currentStep={2} rfpDoc={rfpDoc}>
       <div className="flex flex-col h-screen">
         {/* Header with sub-step indicator */}
         <div className="px-8 pt-6 pb-6 border-b bg-card">
