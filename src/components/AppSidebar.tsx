@@ -27,7 +27,7 @@ interface AppSidebarProps {
   rfpDoc?: RfpDocInfo | null;
 }
 
-export function AppSidebar({ currentStep = 1 }: AppSidebarProps) {
+export function AppSidebar({ currentStep = 1, rfpDoc }: AppSidebarProps) {
   const navigate = useNavigate();
   const location = useLocation();
 
