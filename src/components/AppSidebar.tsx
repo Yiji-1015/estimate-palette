@@ -1,4 +1,4 @@
-import { ClipboardList, FileText, MessageSquare, CheckCircle } from 'lucide-react';
+import { ClipboardList, FileText, MessageSquare, CheckCircle, FileUp } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const navItems = [
@@ -15,11 +15,19 @@ const steps = [
   { step: 4, label: '리뷰 확정' },
 ];
 
-interface AppSidebarProps {
-  currentStep?: number;
+export interface RfpDocInfo {
+  fileName: string;
+  client: string;
+  docType: string;
+  status: '업로드 전' | '분석 중' | '분석 완료' | '확정';
 }
 
-export function AppSidebar({ currentStep = 1 }: AppSidebarProps) {
+interface AppSidebarProps {
+  currentStep?: number;
+  rfpDoc?: RfpDocInfo | null;
+}
+
+export function AppSidebar({ currentStep = 1, rfpDoc }: AppSidebarProps) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -50,6 +58,28 @@ export function AppSidebar({ currentStep = 1 }: AppSidebarProps) {
           );
         })}
       </nav>
+
+      {/* RFP Document Info */}
+      {rfpDoc && (
+        <div className="mx-3 mb-4 p-3 rounded-lg bg-[hsl(var(--sidebar-hover))] border border-[hsl(var(--sidebar-active)/.3)]">
+          <div className="flex items-center gap-2 mb-2">
+            <FileUp className="w-4 h-4 text-[hsl(var(--sidebar-muted))]" />
+            <span className="text-xs text-[hsl(var(--sidebar-muted))] uppercase tracking-wider">현재 RFP</span>
+          </div>
+          <p className="text-sm font-medium text-[hsl(var(--sidebar-fg))] truncate" title={rfpDoc.fileName}>
+            {rfpDoc.fileName}
+          </p>
+          <p className="text-xs text-[hsl(var(--sidebar-muted))] mt-1 truncate">
+            {rfpDoc.client}
+          </p>
+          <div className="flex items-center gap-2 mt-2">
+            <span className="text-xs text-[hsl(var(--sidebar-muted))]">{rfpDoc.docType}</span>
+            <span className="ml-auto text-xs px-1.5 py-0.5 rounded-full bg-[hsl(var(--sidebar-active))] text-[hsl(var(--sidebar-fg))]">
+              {rfpDoc.status}
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Stepper */}
       <div className="px-4 pb-6">
