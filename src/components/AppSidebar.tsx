@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import {
-  ClipboardList,
   FileText,
   MessageSquare,
   CheckCircle,
   Plus,
   FolderOpen,
+  FolderClosed,
   Settings,
+  FileUp,
 } from 'lucide-react';
 import { APP_CONFIG } from '@/config/app';
 import { getProjects, addProject, type Project } from '@/stores/projectStore';
@@ -30,9 +31,9 @@ export interface RfpDocInfo {
 }
 
 const projectSteps = [
-  { icon: FileText, label: 'RFP 분석', path: 'rfp-analysis', emoji: '📄' },
-  { icon: MessageSquare, label: '견적 산정', path: 'estimation', emoji: '💬' },
-  { icon: CheckCircle, label: '리뷰 & 확정', path: 'review', emoji: '✅' },
+  { icon: FileText, label: 'RFP 분석', path: 'rfp-analysis', emoji: '📄', step: 1 },
+  { icon: MessageSquare, label: '견적 산정', path: 'estimation', emoji: '💬', step: 2 },
+  { icon: CheckCircle, label: '리뷰 & 확정', path: 'review', emoji: '✅', step: 3 },
 ];
 
 interface AppSidebarProps {
@@ -45,11 +46,17 @@ export function AppSidebar({ rfpDoc }: AppSidebarProps) {
   const location = useLocation();
   const { projectId } = useParams();
   const [projects] = useState<Project[]>(() => getProjects());
+  const [expandedId, setExpandedId] = useState<string | null>(projectId ?? null);
   const [newDialogOpen, setNewDialogOpen] = useState(false);
   const [newName, setNewName] = useState('');
   const [newClient, setNewClient] = useState('');
 
   const isReferencePage = location.pathname === '/' || location.pathname === '/reference';
+
+  // 현재 선택된 프로젝트의 현재 단계 번호 (URL 기반)
+  const currentStepNum = projectId
+    ? (projectSteps.find((s) => location.pathname.includes(s.path))?.step ?? 0)
+    : 0;
 
   const handleCreateProject = () => {
     if (!newName.trim()) return;
@@ -57,7 +64,18 @@ export function AppSidebar({ rfpDoc }: AppSidebarProps) {
     setNewDialogOpen(false);
     setNewName('');
     setNewClient('');
+    setExpandedId(proj.id);
     navigate(`/projects/${proj.id}/rfp-analysis`);
+  };
+
+  const handleProjectClick = (id: string) => {
+    if (expandedId === id) {
+      // 토글: 이미 열린 프로젝트를 다시 클릭하면 접기
+      setExpandedId(null);
+    } else {
+      setExpandedId(id);
+      navigate(`/projects/${id}/rfp-analysis`);
+    }
   };
 
   return (
@@ -83,10 +101,9 @@ export function AppSidebar({ rfpDoc }: AppSidebarProps) {
           </button>
         </div>
 
-        {/* 구분선 */}
         <div className="mx-4 my-1 border-t border-[hsl(var(--sidebar-hover))]" />
 
-        {/* 프로젝트 섹션 */}
+        {/* 프로젝트 목록 */}
         <div className="px-3 pt-2 flex items-center justify-between">
           <span className="text-xs text-[hsl(var(--sidebar-muted))] uppercase tracking-wider px-3">
             프로젝트
@@ -100,36 +117,37 @@ export function AppSidebar({ rfpDoc }: AppSidebarProps) {
           </button>
         </div>
 
-        {/* 프로젝트 목록 */}
-        <nav className="flex-1 py-2 px-3 space-y-1 overflow-y-auto">
+        <nav className="flex-1 py-2 px-3 space-y-0.5 overflow-y-auto">
           {projects.map((proj) => {
-            const isSelected = projectId === proj.id;
+            const isExpanded = expandedId === proj.id;
+            const isActive = projectId === proj.id;
+            const FolderIcon = isExpanded ? FolderOpen : FolderClosed;
             return (
               <div key={proj.id}>
                 <button
-                  onClick={() => navigate(`/projects/${proj.id}/rfp-analysis`)}
+                  onClick={() => handleProjectClick(proj.id)}
                   className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
-                    isSelected
+                    isActive
                       ? 'bg-[hsl(var(--sidebar-hover))] text-[hsl(var(--sidebar-fg))] font-medium'
                       : 'text-[hsl(var(--sidebar-muted))] hover:bg-[hsl(var(--sidebar-hover))] hover:text-[hsl(var(--sidebar-fg))]'
                   }`}
                 >
-                  <FolderOpen className="w-4 h-4 flex-shrink-0" />
+                  <FolderIcon className="w-4 h-4 flex-shrink-0" />
                   <span className="truncate">{proj.name}</span>
                 </button>
 
-                {/* 선택된 프로젝트의 단계 표시 */}
-                {isSelected && (
+                {/* 펼친 프로젝트의 하위 단계 */}
+                {isExpanded && (
                   <div className="ml-5 mt-1 mb-1 space-y-0.5">
                     {projectSteps.map((step) => {
                       const stepPath = `/projects/${proj.id}/${step.path}`;
-                      const isActive = location.pathname === stepPath;
+                      const isStepActive = location.pathname === stepPath;
                       return (
                         <button
                           key={step.path}
                           onClick={() => navigate(stepPath)}
                           className={`w-full flex items-center gap-2 px-3 py-1.5 rounded text-xs transition-colors ${
-                            isActive
+                            isStepActive
                               ? 'text-[hsl(var(--sidebar-fg))] bg-[hsl(var(--sidebar-active)/.15)] font-medium'
                               : 'text-[hsl(var(--sidebar-muted))] hover:text-[hsl(var(--sidebar-fg))]'
                           }`}
@@ -148,9 +166,13 @@ export function AppSidebar({ rfpDoc }: AppSidebarProps) {
 
         {/* RFP Document Info */}
         {rfpDoc && (
-          <div className="mx-3 mb-4 p-3 rounded-lg bg-[hsl(var(--sidebar-hover))] border border-[hsl(var(--sidebar-active)/.3)]">
+          <div className="mx-3 mb-3 p-3 rounded-lg bg-[hsl(var(--sidebar-hover))] border border-[hsl(var(--sidebar-active)/.3)]">
+            <div className="flex items-center gap-2 mb-2">
+              <FileUp className="w-4 h-4 text-[hsl(var(--sidebar-muted))]" />
+              <span className="text-xs text-[hsl(var(--sidebar-muted))] uppercase tracking-wider">현재 RFP</span>
+            </div>
             <p className="text-sm font-medium text-[hsl(var(--sidebar-fg))] truncate" title={rfpDoc.fileName}>
-              📎 {rfpDoc.fileName}
+              {rfpDoc.fileName}
             </p>
             {rfpDoc.client?.trim() && (
               <p className="text-xs text-[hsl(var(--sidebar-muted))] mt-1 truncate">
@@ -162,6 +184,37 @@ export function AppSidebar({ rfpDoc }: AppSidebarProps) {
               <span className="ml-auto text-xs px-1.5 py-0.5 rounded-full bg-[hsl(var(--sidebar-active))] text-[hsl(var(--sidebar-fg))]">
                 {rfpDoc.status}
               </span>
+            </div>
+          </div>
+        )}
+
+        {/* 진행 단계 (Progress Stepper) */}
+        {projectId && (
+          <div className="px-4 pb-6 border-t border-[hsl(var(--sidebar-hover))] pt-4">
+            <div className="text-xs text-[hsl(var(--sidebar-muted))] mb-3 uppercase tracking-wider">진행 단계</div>
+            <div className="space-y-2">
+              {projectSteps.map((s) => (
+                <div key={s.step} className="flex items-center gap-3">
+                  <div
+                    className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
+                      s.step === currentStepNum
+                        ? 'bg-[hsl(var(--sidebar-active))] text-[hsl(var(--sidebar-fg))]'
+                        : s.step < currentStepNum
+                        ? 'bg-status-confirmed text-[hsl(var(--sidebar-fg))]'
+                        : 'bg-[hsl(var(--sidebar-hover))] text-[hsl(var(--sidebar-muted))]'
+                    }`}
+                  >
+                    {s.step}
+                  </div>
+                  <span
+                    className={`text-sm ${
+                      s.step === currentStepNum ? 'text-[hsl(var(--sidebar-fg))]' : 'text-[hsl(var(--sidebar-muted))]'
+                    }`}
+                  >
+                    {s.label}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
         )}
