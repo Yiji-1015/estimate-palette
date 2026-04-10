@@ -61,8 +61,28 @@
     @apply border-border;
   }
 
+  html {
+    font-size: clamp(14px, 0.875rem + 0.25vw, 16px);
+  }
+
   body {
     @apply bg-background text-foreground;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  /* 작은 화면에서 테이블/카드 내 텍스트 가독성 향상 */
+  @media (max-width: 1024px) {
+    table {
+      font-size: 0.95rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    h1 { font-size: 1.5rem; }
+    h2 { font-size: 1.25rem; }
+    h3 { font-size: 1.1rem; }
+    table {
+      font-size: 0.9rem;
+    }
   }
 }
