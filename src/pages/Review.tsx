@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { APP_CONFIG } from '@/config/app';
 import { AppLayout } from '@/components/AppLayout';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { Badge } from '@/components/ui/badge';
