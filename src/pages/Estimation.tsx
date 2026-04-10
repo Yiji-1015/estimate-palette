@@ -11,7 +11,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Send, Bot } from 'lucide-react';
 import type { ChatMessage, EstimationPhase, ModuleMappingData, FactorSelectData, EffortConfirmData, CostSummaryData, ScenarioSelectData } from '@/types/estimation';
-import { mockInitialMessages, mockFollowUpMessages } from '@/data';
+import { mockFollowUpMessages } from '@/data';
+import { saveEstimationState, loadEstimationState, getDefaultEstimationState } from '@/stores/estimationStore';
 
 // TODO: API 연동 시 아래로 교체
 // POST /api/estimation/:rfpId/start → 견적 산정 시작
@@ -22,12 +23,24 @@ import { mockInitialMessages, mockFollowUpMessages } from '@/data';
 const phaseOrder: EstimationPhase[] = ['mapping', 'factors', 'effort', 'cost', 'scenario'];
 
 export default function Estimation() {
-  const [messages, setMessages] = useState<ChatMessage[]>(mockInitialMessages);
-  const [currentPhase, setCurrentPhase] = useState<EstimationPhase>('mapping');
+  const saved = loadEstimationState();
+  const initial = saved ?? getDefaultEstimationState();
+
+  const [messages, setMessages] = useState<ChatMessage[]>(initial.messages);
+  const [currentPhase, setCurrentPhase] = useState<EstimationPhase>(initial.currentPhase);
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const nextMsgIdx = useRef(0);
+  const nextMsgIdx = useRef(initial.nextMsgIdx);
+
+  // 상태가 바뀔 때마다 저장
+  useEffect(() => {
+    saveEstimationState({
+      messages,
+      currentPhase,
+      nextMsgIdx: nextMsgIdx.current,
+    });
+  }, [messages, currentPhase]);
 
   const scrollToBottom = useCallback(() => {
     if (scrollRef.current) {
@@ -45,7 +58,6 @@ export default function Estimation() {
       const nextPhase = phaseOrder[idx + 1];
       setCurrentPhase(nextPhase);
 
-      // Show typing indicator then add next message
       setIsTyping(true);
       setTimeout(() => {
         setIsTyping(false);
@@ -82,7 +94,6 @@ export default function Estimation() {
     setMessages(prev => [...prev, userMsg]);
     setInputText('');
 
-    // Mock AI response
     setIsTyping(true);
     setTimeout(() => {
       setIsTyping(false);
@@ -123,7 +134,7 @@ export default function Estimation() {
         <div className="flex flex-1 overflow-hidden">
           {/* Chat Area */}
           <div className="flex-1 flex flex-col min-w-0">
-            <div ref={scrollRef} className="flex-1 overflow-auto p-4 space-y-4" style={{ backgroundColor: '#f8f9fa' }}>
+            <div ref={scrollRef} className="flex-1 overflow-auto p-4 space-y-4" style={{ backgroundColor: 'hsl(var(--muted))' }}>
               {messages.map(msg => (
                 <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   {msg.role === 'assistant' && (
