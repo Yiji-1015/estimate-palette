@@ -12,19 +12,19 @@ export function CostSummaryBlock({ data, confirmed, onConfirm }: Props) {
   return (
     <div className="mt-3 border border-border rounded-lg bg-card overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full text-sm">
+        <table className="w-full text-sm table-fixed">
           <thead>
             <tr className="border-b border-border bg-muted/50">
-              <th className="px-3 py-2 text-left font-medium text-muted-foreground">항목</th>
-              <th className="px-3 py-2 text-right font-medium text-muted-foreground">금액(만원)</th>
-              <th className="px-3 py-2 text-left font-medium text-muted-foreground">상세</th>
+              <th className="px-3 py-2 text-left font-medium text-muted-foreground w-[35%]">항목</th>
+              <th className="px-3 py-2 text-right font-medium text-muted-foreground w-[25%]">금액(만원)</th>
+              <th className="px-3 py-2 text-left font-medium text-muted-foreground w-[40%]">상세</th>
             </tr>
           </thead>
           <tbody>
             {data.costItems.map((ci, i) => (
               <tr key={i} className="border-b border-border last:border-0 hover:bg-muted/30">
-                <td className="px-3 py-2 text-foreground">{ci.category}</td>
-                <td className="px-3 py-2 text-right font-mono text-foreground">{fmt(ci.amount)}</td>
+                <td className="px-3 py-2 text-foreground text-sm">{ci.category}</td>
+                <td className="px-3 py-2 text-right font-mono text-foreground text-sm">{fmt(ci.amount)}</td>
                 <td className="px-3 py-2 text-muted-foreground text-xs">{ci.detail}</td>
               </tr>
             ))}
