@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MODULE_COLORS, MODULE_LABELS } from '@/config/constants';
+import { MODULE_COLORS, MODULE_LABELS, type ModuleId } from '@/config/constants';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import type { EvidenceData, EstimateLineItem } from '@/types/review';
@@ -8,10 +8,6 @@ interface EvidencePanelProps {
   selectedItem: EstimateLineItem | null;
   evidence: EvidenceData | null;
 }
-
-const FACTOR_COLORS = MODULE_COLORS;
-
-const moduleLabels = MODULE_LABELS;
 
 interface ModuleChartProps {
   lineItems: EstimateLineItem[];
@@ -23,9 +19,9 @@ export function ModulePieChart({ lineItems }: ModuleChartProps) {
     moduleEffort[li.module] = (moduleEffort[li.module] || 0) + li.effort;
   });
   const data = Object.entries(moduleEffort).map(([name, value]) => ({
-    name: moduleLabels[name] || name,
+    name: MODULE_LABELS[name as ModuleId] ?? name,
     value: Math.round(value * 10) / 10,
-    color: FACTOR_COLORS[name] || 'hsl(var(--muted))',
+    color: MODULE_COLORS[name as ModuleId] ?? 'hsl(var(--muted))',
   }));
 
   return (

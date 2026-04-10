@@ -17,7 +17,7 @@ export const MODULE_IDS = [
 export type ModuleId = (typeof MODULE_IDS)[number];
 
 /** 모듈별 색상 (차트, 범례 등) */
-export const MODULE_COLORS: Record<string, string> = {
+export const MODULE_COLORS: Record<ModuleId, string> = {
   'DO-MINE': 'hsl(25, 95%, 53%)',
   'DO-SPE': 'hsl(217, 91%, 60%)',
   'DO-OCAI': 'hsl(142, 71%, 45%)',
@@ -27,7 +27,7 @@ export const MODULE_COLORS: Record<string, string> = {
 };
 
 /** 모듈 약칭 라벨 */
-export const MODULE_LABELS: Record<string, string> = {
+export const MODULE_LABELS: Record<ModuleId, string> = {
   'DO-MINE': 'DO-MINE',
   'DO-SPE': 'DO-SPE',
   'DO-OCAI': 'DO-OCAI',
@@ -49,6 +49,32 @@ export const MODULE_INFO = [
 export const WORK_TYPES = ['신규 구축', '커스터마이징', '설정/연동만'] as const;
 export type WorkType = (typeof WORK_TYPES)[number];
 
+/* ─── 견적 참조 데이터 ─── */
+
+export const ADJUSTMENT_FACTOR_RANGES = [
+  '복잡도: 0.7 ~ 1.6',
+  '연계: 0.8 ~ 1.6',
+  '데이터: 0.8 ~ 1.5',
+  '보안: 1.0 ~ 1.5',
+  '비기능: 1.0 ~ 1.5',
+  '일정: 0.9 ~ 1.5',
+  '환경: 0.9 ~ 1.2',
+  '산출물: 0.8 ~ 1.3',
+  '운영전환: 1.0 ~ 1.2',
+  '재사용감면: 0.6 ~ 1.0',
+] as const;
+
+export const ROLE_RATE_REFERENCES = [
+  'AI 개발 (고급): 1,100만원',
+  '개발자 (고급): 900만원',
+  '개발자 (중급): 750만원',
+  'PM (고급): 1,000만원',
+  'QA (중급): 700만원',
+  '아키텍트 (고급): 1,100만원',
+] as const;
+
+export const TARGET_MARGIN_LABEL = '마진 정책: 목표 25%';
+
 /* ─── 프로젝트 페이즈 & 색상 ─── */
 
 export const PHASE_COLORS: Record<string, string> = {
@@ -57,6 +83,9 @@ export const PHASE_COLORS: Record<string, string> = {
   '테스트': 'hsl(25, 95%, 53%)',
   '이관/안정화': 'hsl(262, 83%, 58%)',
 };
+
+export const GANTT_MONTHS = [1, 2, 3, 4, 5, 6, 7] as const;
+export const GANTT_GRID_TEMPLATE = '100px 40px 1fr';
 
 /* ─── 요구사항 카테고리 → 모듈 매핑 ─── */
 

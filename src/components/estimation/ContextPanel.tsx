@@ -1,13 +1,16 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { EstimationPhase } from '@/types/estimation';
 import { mockRfpAnalysis } from '@/data';
-import { MODULE_INFO } from '@/config/constants';
+import {
+  ADJUSTMENT_FACTOR_RANGES,
+  MODULE_INFO,
+  ROLE_RATE_REFERENCES,
+  TARGET_MARGIN_LABEL,
+} from '@/config/constants';
 
 interface Props {
   currentPhase: EstimationPhase;
 }
-
-const moduleInfo = MODULE_INFO;
 
 export function ContextPanel({ currentPhase }: Props) {
   return (
@@ -33,7 +36,7 @@ function ReferenceContent({ currentPhase }: { currentPhase: EstimationPhase }) {
     return (
       <div className="space-y-3">
         <h3 className="text-sm font-semibold text-foreground">솔루션 모듈 카탈로그</h3>
-        {moduleInfo.map(m => (
+        {MODULE_INFO.map(m => (
           <div key={m.id} className="border border-border rounded-lg p-3">
             <div className="font-medium text-sm text-foreground">{m.id}</div>
             <div className="text-xs text-muted-foreground mt-1">{m.name}</div>
@@ -49,16 +52,9 @@ function ReferenceContent({ currentPhase }: { currentPhase: EstimationPhase }) {
         <h3 className="text-sm font-semibold text-foreground">조정계수 기준표</h3>
         <p className="text-xs text-muted-foreground">각 계수는 RFP 분석 결과를 바탕으로 AI가 추천합니다. 필요 시 직접 변경 가능합니다.</p>
         <div className="border border-border rounded-lg p-3 text-xs text-muted-foreground space-y-1">
-          <div>복잡도: 0.7 ~ 1.6</div>
-          <div>연계: 0.8 ~ 1.6</div>
-          <div>데이터: 0.8 ~ 1.5</div>
-          <div>보안: 1.0 ~ 1.5</div>
-          <div>비기능: 1.0 ~ 1.5</div>
-          <div>일정: 0.9 ~ 1.5</div>
-          <div>환경: 0.9 ~ 1.2</div>
-          <div>산출물: 0.8 ~ 1.3</div>
-          <div>운영전환: 1.0 ~ 1.2</div>
-          <div>재사용감면: 0.6 ~ 1.0</div>
+          {ADJUSTMENT_FACTOR_RANGES.map((item) => (
+            <div key={item}>{item}</div>
+          ))}
         </div>
       </div>
     );
@@ -68,7 +64,7 @@ function ReferenceContent({ currentPhase }: { currentPhase: EstimationPhase }) {
       <div className="space-y-2">
         <h3 className="text-sm font-semibold text-foreground">기준공수표</h3>
         <p className="text-xs text-muted-foreground">각 모듈별 작업 유형에 따른 기준공수 (M/M) 입니다.</p>
-        {moduleInfo.map(m => (
+        {MODULE_INFO.map(m => (
           <div key={m.id} className="border border-border rounded-lg p-2">
             <div className="font-medium text-xs text-foreground">{m.id} — {m.name}</div>
           </div>
@@ -82,14 +78,11 @@ function ReferenceContent({ currentPhase }: { currentPhase: EstimationPhase }) {
         <h3 className="text-sm font-semibold text-foreground">단가표 & 마진 정책</h3>
         <div className="border border-border rounded-lg p-3 text-xs space-y-1">
           <div className="text-foreground font-medium mb-2">역할별 월단가</div>
-          <div className="text-muted-foreground">AI 개발 (고급): 1,100만원</div>
-          <div className="text-muted-foreground">개발자 (고급): 900만원</div>
-          <div className="text-muted-foreground">개발자 (중급): 750만원</div>
-          <div className="text-muted-foreground">PM (고급): 1,000만원</div>
-          <div className="text-muted-foreground">QA (중급): 700만원</div>
-          <div className="text-muted-foreground">아키텍트 (고급): 1,100만원</div>
+          {ROLE_RATE_REFERENCES.map((item) => (
+            <div key={item} className="text-muted-foreground">{item}</div>
+          ))}
           <div className="border-t border-border my-2" />
-          <div className="text-foreground font-medium">마진 정책: 목표 25%</div>
+          <div className="text-foreground font-medium">{TARGET_MARGIN_LABEL}</div>
         </div>
       </div>
     );
