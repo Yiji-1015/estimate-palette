@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import type { ScenarioSelectData } from '@/types/estimation';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -15,6 +15,7 @@ interface Props {
 export function ScenarioSelectBlock({ data, confirmed, onConfirm, onChange }: Props) {
   const [selectedId, setSelectedId] = useState<string | undefined>(data.selectedId);
   const navigate = useNavigate();
+  const { projectId } = useParams();
   const fmt = (n: number) => n.toLocaleString();
 
   useEffect(() => {
@@ -84,7 +85,7 @@ export function ScenarioSelectBlock({ data, confirmed, onConfirm, onChange }: Pr
       {confirmed && (
         <div className="p-3 border-t border-border bg-muted/30 flex items-center justify-between">
           <span className="text-sm text-status-confirmed-foreground font-medium">✅ 시나리오 확정 완료</span>
-          <Button size="sm" onClick={() => navigate('/review')} className="gap-1">
+          <Button size="sm" onClick={() => navigate(`/projects/${projectId}/review`)} className="gap-1">
             리뷰 & 확정으로 이동 <ArrowRight className="w-4 h-4" />
           </Button>
         </div>
