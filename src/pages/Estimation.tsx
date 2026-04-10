@@ -169,7 +169,7 @@ export default function Estimation() {
   };
 
   return (
-    <AppLayout currentStep={3}>
+    <AppLayout currentStep={3} rfpDoc={getRfpDoc()}>
       <div className="flex flex-col h-screen">
         <EstimationProgressBar currentPhase={currentPhase} />
         <div className="flex flex-1 overflow-hidden">
