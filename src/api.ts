@@ -61,72 +61,101 @@ async function requestForm<T>(path: string, formData: FormData): Promise<T> {
   return parseResponse<T>(response);
 }
 
+// Helper to build project-scoped paths
+function projectPath(projectId: string, sub: string): string {
+  return `/projects/${projectId}${sub}`;
+}
+
 export const api = {
-  // Step 1: Reference data
-  getReference: <T = unknown>() => request<T>("/reference"),
-  saveReference: <T = unknown>(data: unknown) =>
-    request<T>("/reference", {
-      method: "PUT",
-      body: JSON.stringify(data),
-    }),
-  confirmReference: <T = unknown>() =>
-    request<T>("/reference/confirm", {
-      method: "POST",
-    }),
-
-  // Step 2: RFP analysis
-  uploadRfp: <T = unknown>(file: File, docType: string) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("docType", docType);
-    return requestForm<T>("/rfp/upload", formData);
+  // ── Projects ──────────────────────────────────────────
+  projects: {
+    list: <T = unknown>() => request<T>("/projects"),
+    create: <T = unknown>(data: { name: string; client: string }) =>
+      request<T>("/projects", {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
+    update: <T = unknown>(projectId: string, data: { name?: string; client?: string }) =>
+      request<T>(`/projects/${projectId}`, {
+        method: "PUT",
+        body: JSON.stringify(data),
+      }),
+    delete: <T = unknown>(projectId: string) =>
+      request<T>(`/projects/${projectId}`, {
+        method: "DELETE",
+      }),
   },
-  getRfpAnalysis: <T = unknown>(rfpId: string) => request<T>(`/rfp-analysis/${rfpId}`),
-  saveRequirements: <T = unknown>(rfpId: string, requirements: unknown) =>
-    request<T>(`/rfp/${rfpId}/requirements`, {
-      method: "PUT",
-      body: JSON.stringify(requirements),
-    }),
-  confirmRequirements: <T = unknown>(rfpId: string) =>
-    request<T>(`/rfp/${rfpId}/confirm`, {
-      method: "POST",
-    }),
 
-  // Step 3: Estimation
-  startEstimation: <T = unknown>(rfpId: string) =>
-    request<T>(`/estimation/${rfpId}/start`, {
-      method: "POST",
-    }),
-  getEstimation: <T = unknown>(rfpId: string) => request<T>(`/estimation/${rfpId}`),
-  saveEstimationPhase: <T = unknown>(
-    rfpId: string,
-    phase: string,
-    payload: unknown
-  ) =>
-    request<T>(`/estimation/${rfpId}/phase/${phase}`, {
-      method: "PUT",
-      body: JSON.stringify(payload),
-    }),
-  confirmEstimation: <T = unknown>(rfpId: string) =>
-    request<T>(`/estimation/${rfpId}/confirm`, {
-      method: "POST",
-    }),
-
-  // Step 4: Review
-  getReview: <T = unknown>(rfpId: string, scenario?: string) => {
-    const query = scenario ? `?scenario=${encodeURIComponent(scenario)}` : "";
-    return request<T>(`/review/${rfpId}${query}`);
+  // ── Reference Data (global) ───────────────────────────
+  reference: {
+    get: <T = unknown>() => request<T>("/reference"),
+    save: <T = unknown>(data: unknown) =>
+      request<T>("/reference", {
+        method: "PUT",
+        body: JSON.stringify(data),
+      }),
+    confirm: <T = unknown>() =>
+      request<T>("/reference/confirm", {
+        method: "POST",
+      }),
   },
-  saveReview: <T = unknown>(rfpId: string, payload: unknown) =>
-    request<T>(`/review/${rfpId}`, {
-      method: "PUT",
-      body: JSON.stringify(payload),
-    }),
-  confirmReview: <T = unknown>(rfpId: string) =>
-    request<T>(`/review/${rfpId}/confirm`, {
-      method: "POST",
-    }),
-  exportReview: (rfpId: string, format: "pdf" | "xlsx") =>
-    buildUrl(`/review/${rfpId}/export?format=${format}`),
+
+  // ── RFP Analysis (project-scoped) ─────────────────────
+  rfp: {
+    upload: <T = unknown>(projectId: string, file: File, docType: string) => {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("docType", docType);
+      return requestForm<T>(projectPath(projectId, "/rfp/upload"), formData);
+    },
+    getAnalysis: <T = unknown>(projectId: string) =>
+      request<T>(projectPath(projectId, "/rfp-analysis")),
+    saveRequirements: <T = unknown>(projectId: string, requirements: unknown) =>
+      request<T>(projectPath(projectId, "/rfp/requirements"), {
+        method: "PUT",
+        body: JSON.stringify(requirements),
+      }),
+    confirm: <T = unknown>(projectId: string) =>
+      request<T>(projectPath(projectId, "/rfp/confirm"), {
+        method: "POST",
+      }),
+  },
+
+  // ── Estimation (project-scoped) ───────────────────────
+  estimation: {
+    start: <T = unknown>(projectId: string) =>
+      request<T>(projectPath(projectId, "/estimation/start"), {
+        method: "POST",
+      }),
+    get: <T = unknown>(projectId: string) =>
+      request<T>(projectPath(projectId, "/estimation")),
+    savePhase: <T = unknown>(projectId: string, phase: string, payload: unknown) =>
+      request<T>(projectPath(projectId, `/estimation/phase/${phase}`), {
+        method: "PUT",
+        body: JSON.stringify(payload),
+      }),
+    confirm: <T = unknown>(projectId: string) =>
+      request<T>(projectPath(projectId, "/estimation/confirm"), {
+        method: "POST",
+      }),
+  },
+
+  // ── Review (project-scoped) ───────────────────────────
+  review: {
+    get: <T = unknown>(projectId: string, scenario?: string) => {
+      const query = scenario ? `?scenario=${encodeURIComponent(scenario)}` : "";
+      return request<T>(projectPath(projectId, `/review${query}`));
+    },
+    save: <T = unknown>(projectId: string, payload: unknown) =>
+      request<T>(projectPath(projectId, "/review"), {
+        method: "PUT",
+        body: JSON.stringify(payload),
+      }),
+    confirm: <T = unknown>(projectId: string) =>
+      request<T>(projectPath(projectId, "/review/confirm"), {
+        method: "POST",
+      }),
+    exportUrl: (projectId: string, format: "pdf" | "xlsx") =>
+      buildUrl(projectPath(projectId, `/review/export?format=${format}`)),
+  },
 };
-

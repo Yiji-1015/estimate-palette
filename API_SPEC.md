@@ -1,4 +1,4 @@
-# API Spec (Frontend <-> Backend)
+# API Spec (Frontend ↔ Backend)
 
 This document defines the API contract used by `src/api.ts`.
 
@@ -8,104 +8,140 @@ This document defines the API contract used by `src/api.ts`.
 - Content type:
   - JSON requests: `application/json`
   - File upload: `multipart/form-data`
-- Identifier:
-  - `rfpId` identifies one RFP/project thread
+- Identifiers:
+  - `projectId` identifies one project (top-level resource)
+- All project-scoped endpoints are nested under `/api/projects/{projectId}/...`
+- Reference data is global (shared across all projects)
 
-## Step 1: Reference Data
+---
 
-### 1) Get reference data
+## Projects
+
+### 1) List projects
+- Method: `GET`
+- Path: `/api/projects`
+- Response: `Project[]`
+
+### 2) Create project
+- Method: `POST`
+- Path: `/api/projects`
+- Body: `{ name: string, client: string }`
+- Response: `Project`
+
+### 3) Update project
+- Method: `PUT`
+- Path: `/api/projects/{projectId}`
+- Body: `{ name?: string, client?: string }`
+- Response: `Project`
+
+### 4) Delete project
+- Method: `DELETE`
+- Path: `/api/projects/{projectId}`
+- Response: `{ success: true }`
+
+---
+
+## Reference Data (Global)
+
+### 5) Get reference data
 - Method: `GET`
 - Path: `/api/reference`
-- Response: reference payload for Step 1 UI
+- Response: reference payload for reference UI
 
-### 2) Save reference data
+### 6) Save reference data
 - Method: `PUT`
 - Path: `/api/reference`
-- Body: full Step 1 reference payload
+- Body: full reference payload
 - Response: saved payload or success metadata
 
-### 3) Confirm reference data
+### 7) Confirm reference data
 - Method: `POST`
 - Path: `/api/reference/confirm`
 - Response: confirmation status
 
-## Step 2: RFP Analysis
+---
 
-### 4) Upload RFP and start analysis
+## RFP Analysis (Project-scoped)
+
+### 8) Upload RFP and start analysis
 - Method: `POST`
-- Path: `/api/rfp/upload`
+- Path: `/api/projects/{projectId}/rfp/upload`
 - Body (`multipart/form-data`):
   - `file`: binary file (`pdf`, `hwp`, `docx`)
   - `docType`: string
-- Response:
-  - `rfpId`: string
-  - optional analysis kickoff metadata
+- Response: analysis kickoff metadata
 
-### 5) Get analysis result
+### 9) Get analysis result
 - Method: `GET`
-- Path: `/api/rfp-analysis/{rfpId}`
-- Response: full Step 2 analysis payload
+- Path: `/api/projects/{projectId}/rfp-analysis`
+- Response: full analysis payload
 
-### 6) Save requirements
+### 10) Save requirements
 - Method: `PUT`
-- Path: `/api/rfp/{rfpId}/requirements`
-- Body: requirements array or requirements object
+- Path: `/api/projects/{projectId}/rfp/requirements`
+- Body: requirements array or object
 - Response: saved requirements or success metadata
 
-### 7) Confirm requirements
+### 11) Confirm requirements
 - Method: `POST`
-- Path: `/api/rfp/{rfpId}/confirm`
+- Path: `/api/projects/{projectId}/rfp/confirm`
 - Response: confirmation status
 
-## Step 3: Estimation
+---
 
-### 8) Start estimation
+## Estimation (Project-scoped)
+
+### 12) Start estimation
 - Method: `POST`
-- Path: `/api/estimation/{rfpId}/start`
+- Path: `/api/projects/{projectId}/estimation/start`
 - Response: initial estimation state
 
-### 9) Get estimation state
+### 13) Get estimation state
 - Method: `GET`
-- Path: `/api/estimation/{rfpId}`
-- Response: full Step 3 state (messages, phase, interaction blocks)
+- Path: `/api/projects/{projectId}/estimation`
+- Response: full estimation state (messages, phase, interaction blocks)
 
-### 10) Save one estimation phase
+### 14) Save one estimation phase
 - Method: `PUT`
-- Path: `/api/estimation/{rfpId}/phase/{phase}`
+- Path: `/api/projects/{projectId}/estimation/phase/{phase}`
 - Body: phase-specific payload
 - Response: updated phase state
 
-### 11) Confirm estimation scenario
+### 15) Confirm estimation scenario
 - Method: `POST`
-- Path: `/api/estimation/{rfpId}/confirm`
+- Path: `/api/projects/{projectId}/estimation/confirm`
 - Response: confirmation status
 
-## Step 4: Review & Finalize
+---
 
-### 12) Get review data
+## Review & Finalize (Project-scoped)
+
+### 16) Get review data
 - Method: `GET`
-- Path: `/api/review/{rfpId}`
+- Path: `/api/projects/{projectId}/review`
 - Query (optional):
   - `scenario`: string (`minimal`, `recommended`, `extended`, etc.)
-- Response: Step 4 sheet/evidence payload
+- Response: review sheet/evidence payload
 
-### 13) Save review edits
+### 17) Save review edits
 - Method: `PUT`
-- Path: `/api/review/{rfpId}`
+- Path: `/api/projects/{projectId}/review`
 - Body: edited sheet payload
 - Response: updated review payload
 
-### 14) Confirm final review
+### 18) Confirm final review
 - Method: `POST`
-- Path: `/api/review/{rfpId}/confirm`
+- Path: `/api/projects/{projectId}/review/confirm`
 - Response: confirmation status
 
-### 15) Export review file
+### 19) Export review file
 - Method: `GET`
-- Path: `/api/review/{rfpId}/export`
+- Path: `/api/projects/{projectId}/review/export`
 - Query:
   - `format`: `pdf` or `xlsx`
 - Response: file stream/download
+
+---
 
 ## Frontend Usage
 
@@ -113,4 +149,3 @@ This document defines the API contract used by `src/api.ts`.
 - Pages/components should not call `fetch` directly.
 - If backend domain is separate, set:
   - `VITE_API_BASE_URL=https://your-backend-domain`
-
