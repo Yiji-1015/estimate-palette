@@ -9,9 +9,21 @@ import {
   FolderClosed,
   Settings,
   FileUp,
+  Pencil,
+  Trash2,
+  MoreHorizontal,
 } from 'lucide-react';
 import { APP_CONFIG } from '@/config/app';
-import { getProjects, addProject, type Project } from '@/stores/projectStore';
+import {
+  getProjects,
+  addProject,
+  updateProject,
+  deleteProject,
+  canAddProject,
+  getProject,
+  MAX_PROJECTS,
+  type Project,
+} from '@/stores/projectStore';
 import {
   Dialog,
   DialogContent,
@@ -19,9 +31,26 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export interface RfpDocInfo {
   fileName: string;
@@ -45,32 +74,79 @@ export function AppSidebar({ rfpDoc }: AppSidebarProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const { projectId } = useParams();
-  const [projects] = useState<Project[]>(() => getProjects());
+  const [projects, setProjects] = useState<Project[]>(() => getProjects());
   const [expandedId, setExpandedId] = useState<string | null>(projectId ?? null);
+
+  // New project dialog
   const [newDialogOpen, setNewDialogOpen] = useState(false);
   const [newName, setNewName] = useState('');
   const [newClient, setNewClient] = useState('');
 
+  // Edit project dialog
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [editId, setEditId] = useState<string | null>(null);
+  const [editName, setEditName] = useState('');
+  const [editClient, setEditClient] = useState('');
+
+  // Delete confirm
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+
   const isReferencePage = location.pathname === '/' || location.pathname === '/reference';
 
-  // 현재 선택된 프로젝트의 현재 단계 번호 (URL 기반)
   const currentStepNum = projectId
     ? (projectSteps.find((s) => location.pathname.includes(s.path))?.step ?? 0)
     : 0;
 
+  // 현재 프로젝트가 RFP 업로드 완료인지
+  const currentProject = projectId ? getProject(projectId) : undefined;
+  const showProgress = projectId && currentProject?.rfpUploaded;
+
+  const refreshProjects = () => setProjects(getProjects());
+
   const handleCreateProject = () => {
     if (!newName.trim()) return;
     const proj = addProject(newName.trim(), newClient.trim());
+    if (!proj) return;
     setNewDialogOpen(false);
     setNewName('');
     setNewClient('');
+    refreshProjects();
     setExpandedId(proj.id);
     navigate(`/projects/${proj.id}/rfp-analysis`);
   };
 
+  const handleEditProject = () => {
+    if (!editId || !editName.trim()) return;
+    updateProject(editId, { name: editName.trim(), client: editClient.trim() });
+    setEditDialogOpen(false);
+    refreshProjects();
+  };
+
+  const handleDeleteProject = () => {
+    if (!deleteId) return;
+    deleteProject(deleteId);
+    setDeleteDialogOpen(false);
+    refreshProjects();
+    if (projectId === deleteId) {
+      navigate('/reference');
+    }
+  };
+
+  const openEditDialog = (proj: Project) => {
+    setEditId(proj.id);
+    setEditName(proj.name);
+    setEditClient(proj.client);
+    setEditDialogOpen(true);
+  };
+
+  const openDeleteDialog = (id: string) => {
+    setDeleteId(id);
+    setDeleteDialogOpen(true);
+  };
+
   const handleProjectClick = (id: string) => {
     if (expandedId === id) {
-      // 토글: 이미 열린 프로젝트를 다시 클릭하면 접기
       setExpandedId(null);
     } else {
       setExpandedId(id);
@@ -103,66 +179,98 @@ export function AppSidebar({ rfpDoc }: AppSidebarProps) {
 
         <div className="mx-4 my-1 border-t border-[hsl(var(--sidebar-hover))]" />
 
-        {/* 프로젝트 목록 */}
-        <div className="px-3 pt-2 flex items-center justify-between">
+        {/* 프로젝트 헤더 */}
+        <div className="px-3 pt-2 pb-1 flex items-center justify-between">
           <span className="text-xs text-[hsl(var(--sidebar-muted))] uppercase tracking-wider px-3">
-            프로젝트
+            프로젝트 ({projects.length}/{MAX_PROJECTS})
           </span>
           <button
             onClick={() => setNewDialogOpen(true)}
-            className="p-1 rounded hover:bg-[hsl(var(--sidebar-hover))] text-[hsl(var(--sidebar-muted))] hover:text-[hsl(var(--sidebar-fg))] transition-colors"
-            title="새 프로젝트"
+            disabled={!canAddProject()}
+            className={`p-1 rounded transition-colors ${
+              canAddProject()
+                ? 'hover:bg-[hsl(var(--sidebar-hover))] text-[hsl(var(--sidebar-muted))] hover:text-[hsl(var(--sidebar-fg))]'
+                : 'text-[hsl(var(--sidebar-hover))] cursor-not-allowed'
+            }`}
+            title={canAddProject() ? '새 프로젝트' : `최대 ${MAX_PROJECTS}개까지 생성 가능`}
           >
             <Plus className="w-4 h-4" />
           </button>
         </div>
 
-        <nav className="flex-1 py-2 px-3 space-y-0.5 overflow-y-auto">
-          {projects.map((proj) => {
-            const isExpanded = expandedId === proj.id;
-            const isActive = projectId === proj.id;
-            const FolderIcon = isExpanded ? FolderOpen : FolderClosed;
-            return (
-              <div key={proj.id}>
-                <button
-                  onClick={() => handleProjectClick(proj.id)}
-                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
-                    isActive
-                      ? 'bg-[hsl(var(--sidebar-hover))] text-[hsl(var(--sidebar-fg))] font-medium'
-                      : 'text-[hsl(var(--sidebar-muted))] hover:bg-[hsl(var(--sidebar-hover))] hover:text-[hsl(var(--sidebar-fg))]'
-                  }`}
-                >
-                  <FolderIcon className="w-4 h-4 flex-shrink-0" />
-                  <span className="truncate">{proj.name}</span>
-                </button>
+        {/* 프로젝트 목록 — 스크롤 영역 */}
+        <ScrollArea className="flex-1 min-h-0">
+          <nav className="py-2 px-3 space-y-0.5">
+            {projects.map((proj) => {
+              const isExpanded = expandedId === proj.id;
+              const isActive = projectId === proj.id;
+              const FolderIcon = isExpanded ? FolderOpen : FolderClosed;
+              return (
+                <div key={proj.id}>
+                  <div className="flex items-center group">
+                    <button
+                      onClick={() => handleProjectClick(proj.id)}
+                      className={`flex-1 flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
+                        isActive
+                          ? 'bg-[hsl(var(--sidebar-hover))] text-[hsl(var(--sidebar-fg))] font-medium'
+                          : 'text-[hsl(var(--sidebar-muted))] hover:bg-[hsl(var(--sidebar-hover))] hover:text-[hsl(var(--sidebar-fg))]'
+                      }`}
+                    >
+                      <FolderIcon className="w-4 h-4 flex-shrink-0" />
+                      <span className="truncate">{proj.name}</span>
+                    </button>
 
-                {/* 펼친 프로젝트의 하위 단계 */}
-                {isExpanded && (
-                  <div className="ml-5 mt-1 mb-1 space-y-0.5">
-                    {projectSteps.map((step) => {
-                      const stepPath = `/projects/${proj.id}/${step.path}`;
-                      const isStepActive = location.pathname === stepPath;
-                      return (
-                        <button
-                          key={step.path}
-                          onClick={() => navigate(stepPath)}
-                          className={`w-full flex items-center gap-2 px-3 py-1.5 rounded text-xs transition-colors ${
-                            isStepActive
-                              ? 'text-[hsl(var(--sidebar-fg))] bg-[hsl(var(--sidebar-active)/.15)] font-medium'
-                              : 'text-[hsl(var(--sidebar-muted))] hover:text-[hsl(var(--sidebar-fg))]'
-                          }`}
-                        >
-                          <span>{step.emoji}</span>
-                          <span>{step.label}</span>
+                    {/* 수정/삭제 메뉴 */}
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <button className="p-1 rounded opacity-0 group-hover:opacity-100 transition-opacity hover:bg-[hsl(var(--sidebar-hover))] text-[hsl(var(--sidebar-muted))]">
+                          <MoreHorizontal className="w-3.5 h-3.5" />
                         </button>
-                      );
-                    })}
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-36">
+                        <DropdownMenuItem onClick={() => openEditDialog(proj)}>
+                          <Pencil className="w-3.5 h-3.5 mr-2" />
+                          수정
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => openDeleteDialog(proj.id)}
+                          className="text-destructive focus:text-destructive"
+                        >
+                          <Trash2 className="w-3.5 h-3.5 mr-2" />
+                          삭제
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
-                )}
-              </div>
-            );
-          })}
-        </nav>
+
+                  {/* 하위 단계 */}
+                  {isExpanded && (
+                    <div className="ml-5 mt-1 mb-1 space-y-0.5">
+                      {projectSteps.map((step) => {
+                        const stepPath = `/projects/${proj.id}/${step.path}`;
+                        const isStepActive = location.pathname === stepPath;
+                        return (
+                          <button
+                            key={step.path}
+                            onClick={() => navigate(stepPath)}
+                            className={`w-full flex items-center gap-2 px-3 py-1.5 rounded text-xs transition-colors ${
+                              isStepActive
+                                ? 'text-[hsl(var(--sidebar-fg))] bg-[hsl(var(--sidebar-active)/.15)] font-medium'
+                                : 'text-[hsl(var(--sidebar-muted))] hover:text-[hsl(var(--sidebar-fg))]'
+                            }`}
+                          >
+                            <span>{step.emoji}</span>
+                            <span>{step.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </nav>
+        </ScrollArea>
 
         {/* RFP Document Info */}
         {rfpDoc && (
@@ -188,8 +296,8 @@ export function AppSidebar({ rfpDoc }: AppSidebarProps) {
           </div>
         )}
 
-        {/* 진행 단계 (Progress Stepper) */}
-        {projectId && (
+        {/* 진행 단계 — RFP 업로드 완료 시에만 표시 */}
+        {showProgress && (
           <div className="px-4 pb-6 border-t border-[hsl(var(--sidebar-hover))] pt-4">
             <div className="text-xs text-[hsl(var(--sidebar-muted))] mb-3 uppercase tracking-wider">진행 단계</div>
             <div className="space-y-2">
@@ -247,15 +355,58 @@ export function AppSidebar({ rfpDoc }: AppSidebarProps) {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setNewDialogOpen(false)}>
-              취소
-            </Button>
-            <Button onClick={handleCreateProject} disabled={!newName.trim()}>
-              생성
-            </Button>
+            <Button variant="outline" onClick={() => setNewDialogOpen(false)}>취소</Button>
+            <Button onClick={handleCreateProject} disabled={!newName.trim()}>생성</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* 프로젝트 수정 다이얼로그 */}
+      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>프로젝트 수정</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div>
+              <Label htmlFor="edit-name">프로젝트명</Label>
+              <Input
+                id="edit-name"
+                value={editName}
+                onChange={(e) => setEditName(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label htmlFor="edit-client">고객사</Label>
+              <Input
+                id="edit-client"
+                value={editClient}
+                onChange={(e) => setEditClient(e.target.value)}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEditDialogOpen(false)}>취소</Button>
+            <Button onClick={handleEditProject} disabled={!editName.trim()}>저장</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* 삭제 확인 다이얼로그 */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>프로젝트를 삭제하시겠습니까?</AlertDialogTitle>
+            <AlertDialogDescription>
+              삭제된 프로젝트는 복구할 수 없습니다.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>취소</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteProject}>삭제</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }
