@@ -19,7 +19,7 @@ export interface RfpDocInfo {
   fileName: string;
   client?: string;
   docType: string;
-  status: '업로드 전' | '분석 중' | '분석 완료' | '확정';
+  status: '업로드 전' | '분석 중' | '분석 완료' | '리뷰 중' | '확정';
 }
 
 interface AppSidebarProps {
