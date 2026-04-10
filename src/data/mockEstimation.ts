@@ -10,16 +10,16 @@ import type {
 
 export const mockModuleMappings: ModuleMappingData = {
   items: [
-    { reqId: "FR-001", reqSummary: "RAG 검색 품질 개선 + Hybrid Search", suggestedModule: "DO-SPE", workType: "커스터마이징", confidence: "high" },
-    { reqId: "FR-002", reqSummary: "다양한 데이터 소스 통합 인덱싱", suggestedModule: "DO-MINE", workType: "신규 구축", confidence: "high" },
-    { reqId: "FR-003", reqSummary: "Citation 기반 근거 검색", suggestedModule: "DO-SPE", workType: "커스터마이징", confidence: "high" },
-    { reqId: "FR-004", reqSummary: "역할별 문서 접근 권한 검색 반영", suggestedModule: "DO-SPE", workType: "커스터마이징", confidence: "medium" },
-    { reqId: "FR-005", reqSummary: "AI Agent 업무 자동화 워크플로", suggestedModule: "DO-OCAI", workType: "신규 구축", confidence: "high" },
-    { reqId: "FR-006", reqSummary: "사내 시스템(ERP, JIRA) 연동 액션", suggestedModule: "DO-OCAI", workType: "신규 구축", confidence: "medium" },
-    { reqId: "FR-007", reqSummary: "AI 서비스 포털 구축", suggestedModule: "DO-LOMO", workType: "신규 구축", confidence: "high" },
-    { reqId: "FR-008", reqSummary: "관리자 모니터링 대시보드", suggestedModule: "DO-LOMO", workType: "커스터마이징", confidence: "high" },
-    { reqId: "FR-009", reqSummary: "AI Guardrail 적용", suggestedModule: "DO-OCAI", workType: "커스터마이징", confidence: "high" },
-    { reqId: "FR-010", reqSummary: "기존 데이터 마이그레이션", suggestedModule: "SI-INTEGRATION", workType: "신규 구축", confidence: "high" },
+    { reqId: "FR-001", reqSummary: "RAG 검색 품질 개선 + Hybrid Search", suggestedModule: "DO-SPE", workType: "커스터마이징" },
+    { reqId: "FR-002", reqSummary: "다양한 데이터 소스 통합 인덱싱", suggestedModule: "DO-MINE", workType: "신규 구축" },
+    { reqId: "FR-003", reqSummary: "Citation 기반 근거 검색", suggestedModule: "DO-SPE", workType: "커스터마이징" },
+    { reqId: "FR-004", reqSummary: "역할별 문서 접근 권한 검색 반영", suggestedModule: "DO-SPE", workType: "커스터마이징" },
+    { reqId: "FR-005", reqSummary: "AI Agent 업무 자동화 워크플로", suggestedModule: "DO-OCAI", workType: "신규 구축" },
+    { reqId: "FR-006", reqSummary: "사내 시스템(ERP, JIRA) 연동 액션", suggestedModule: "DO-OCAI", workType: "신규 구축" },
+    { reqId: "FR-007", reqSummary: "AI 서비스 포털 구축", suggestedModule: "DO-LOMO", workType: "신규 구축" },
+    { reqId: "FR-008", reqSummary: "관리자 모니터링 대시보드", suggestedModule: "DO-LOMO", workType: "커스터마이징" },
+    { reqId: "FR-009", reqSummary: "AI Guardrail 적용", suggestedModule: "DO-OCAI", workType: "커스터마이징" },
+    { reqId: "FR-010", reqSummary: "기존 데이터 마이그레이션", suggestedModule: "SI-INTEGRATION", workType: "신규 구축" },
   ],
 };
 
