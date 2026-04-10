@@ -54,7 +54,7 @@ export function EffortConfirmBlock({ data, confirmed, onConfirm }: Props) {
                 <td className="px-3 py-2 text-xs text-foreground">{li.module}</td>
                 <td className="px-3 py-2 text-xs text-foreground">{li.workType}</td>
                 <td className="px-3 py-2 text-right text-xs text-muted-foreground">{li.baseEffort}</td>
-                <td className="px-3 py-2 text-right">
+                <td className="px-3 py-2 text-right pr-4">
                   {!confirmed && li.editable ? (
                     <Input
                       type="number"
@@ -67,7 +67,7 @@ export function EffortConfirmBlock({ data, confirmed, onConfirm }: Props) {
                     <span className="text-xs font-semibold text-foreground">{li.adjustedEffort}</span>
                   )}
                 </td>
-                <td className="px-3 py-2 text-[11px] text-muted-foreground truncate" title={li.adjustmentDetail}>
+                <td className="px-3 py-2 text-xs text-muted-foreground pl-4" title={li.adjustmentDetail}>
                   {li.adjustmentDetail}
                 </td>
               </tr>
