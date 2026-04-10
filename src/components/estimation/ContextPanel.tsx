@@ -1,17 +1,13 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { EstimationPhase } from '@/types/estimation';
 import { mockRfpAnalysis } from '@/data';
+import { MODULE_INFO } from '@/config/constants';
 
 interface Props {
   currentPhase: EstimationPhase;
 }
 
-const moduleInfo = [
-  { id: 'DO-MINE', name: '데이터 수집·정제·구조화', desc: '크롤러, ETL, 메타데이터 자동생성' },
-  { id: 'DO-SPE', name: '검색 & RAG Core Engine', desc: 'Hybrid Search, Citation, 권한 검색' },
-  { id: 'DO-OCAI', name: 'Agentic AI Orchestration', desc: 'Multi-Agent Workflow, Tool 연동' },
-  { id: 'DO-LOMO', name: '포털 & 모니터링', desc: 'AI 포털 UI, 관리자 대시보드' },
-];
+const moduleInfo = MODULE_INFO;
 
 export function ContextPanel({ currentPhase }: Props) {
   return (
