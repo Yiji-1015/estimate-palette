@@ -296,18 +296,18 @@ export function AppSidebar({ rfpDoc }: AppSidebarProps) {
           </div>
         )}
 
-        {/* 진행 단계 — RFP 업로드 완료 시에만 표시 */}
-        {showProgress && (
-          <div className="px-4 pb-6 border-t border-[hsl(var(--sidebar-hover))] pt-4">
+        {/* 진행 단계 — 항상 표시, RFP 미업로드 시 비활성 */}
+        {projectId && (
+          <div className={`px-4 pb-6 border-t border-[hsl(var(--sidebar-hover))] pt-4 ${!showProgress ? 'opacity-40' : ''}`}>
             <div className="text-xs text-[hsl(var(--sidebar-muted))] mb-3 uppercase tracking-wider">진행 단계</div>
             <div className="space-y-2">
               {projectSteps.map((s) => (
                 <div key={s.step} className="flex items-center gap-3">
                   <div
                     className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
-                      s.step === currentStepNum
+                      showProgress && s.step === currentStepNum
                         ? 'bg-[hsl(var(--sidebar-active))] text-[hsl(var(--sidebar-fg))]'
-                        : s.step < currentStepNum
+                        : showProgress && s.step < currentStepNum
                         ? 'bg-status-confirmed text-[hsl(var(--sidebar-fg))]'
                         : 'bg-[hsl(var(--sidebar-hover))] text-[hsl(var(--sidebar-muted))]'
                     }`}
@@ -316,7 +316,7 @@ export function AppSidebar({ rfpDoc }: AppSidebarProps) {
                   </div>
                   <span
                     className={`text-sm ${
-                      s.step === currentStepNum ? 'text-[hsl(var(--sidebar-fg))]' : 'text-[hsl(var(--sidebar-muted))]'
+                      showProgress && s.step === currentStepNum ? 'text-[hsl(var(--sidebar-fg))]' : 'text-[hsl(var(--sidebar-muted))]'
                     }`}
                   >
                     {s.label}
