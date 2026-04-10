@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { SolutionModule } from '@/types/reference';
+import { CATEGORY_MODULE_MAPPING } from '@/config/constants';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
@@ -54,13 +55,7 @@ export function SolutionModulesTab({ modules, onChange }: SolutionModulesTabProp
     }
   };
 
-  const mappingTable = [
-    { category: 'FR-DATA', description: '데이터 수집/정제/구조화', module: 'DO-MINE' },
-    { category: 'FR-SEARCH', description: '검색/RAG/Retrieval', module: 'DO-SPE' },
-    { category: 'FR-AGENT', description: 'AI Agent/오케스트레이션', module: 'DO-OCAI' },
-    { category: 'FR-PORTAL', description: '사용자 포털/UI', module: 'DO-LOMO' },
-    { category: 'FR-ADMIN', description: '관리자 기능', module: 'DO-LOMO' },
-  ];
+  const mappingTable = [...CATEGORY_MODULE_MAPPING];
 
   return (
     <div className="space-y-6">

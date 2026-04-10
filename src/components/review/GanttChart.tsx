@@ -1,12 +1,8 @@
 import type { PhaseSchedule } from '@/types/review';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { PHASE_COLORS } from '@/config/constants';
 
-const phaseColors: Record<string, string> = {
-  '분석/설계': 'hsl(217, 91%, 60%)',
-  '개발': 'hsl(142, 71%, 45%)',
-  '테스트': 'hsl(25, 95%, 53%)',
-  '이관/안정화': 'hsl(262, 83%, 58%)',
-};
+const phaseColors = PHASE_COLORS;
 
 interface GanttChartProps {
   phases: PhaseSchedule[];

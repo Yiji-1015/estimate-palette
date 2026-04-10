@@ -3,8 +3,10 @@ import type { ModuleMappingData } from '@/types/estimation';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-const moduleOptions = ['DO-MINE', 'DO-SPE', 'DO-OCAI', 'DO-LOMO', 'SI-INTEGRATION', 'SI-CUSTOM'];
-const workTypeOptions: Array<'신규 구축' | '커스터마이징' | '설정/연동만'> = ['신규 구축', '커스터마이징', '설정/연동만'];
+import { MODULE_IDS, WORK_TYPES } from '@/config/constants';
+
+const moduleOptions = [...MODULE_IDS];
+const workTypeOptions = [...WORK_TYPES];
 
 interface Props {
   data: ModuleMappingData;

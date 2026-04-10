@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { MODULE_COLORS, MODULE_LABELS } from '@/config/constants';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import type { EvidenceData, EstimateLineItem } from '@/types/review';
@@ -8,21 +9,9 @@ interface EvidencePanelProps {
   evidence: EvidenceData | null;
 }
 
-const FACTOR_COLORS: Record<string, string> = {
-  'DO-SPE': 'hsl(217, 91%, 60%)',
-  'DO-OCAI': 'hsl(142, 71%, 45%)',
-  'DO-MINE': 'hsl(25, 95%, 53%)',
-  'DO-LOMO': 'hsl(262, 83%, 58%)',
-  'SI-INTEGRATION': 'hsl(340, 82%, 52%)',
-};
+const FACTOR_COLORS = MODULE_COLORS;
 
-const moduleLabels: Record<string, string> = {
-  'DO-SPE': 'DO-SPE',
-  'DO-OCAI': 'DO-OCAI',
-  'DO-MINE': 'DO-MINE',
-  'DO-LOMO': 'DO-LOMO',
-  'SI-INTEGRATION': 'SI',
-};
+const moduleLabels = MODULE_LABELS;
 
 interface ModuleChartProps {
   lineItems: EstimateLineItem[];
