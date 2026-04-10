@@ -16,24 +16,46 @@ interface EstimationSnapshot {
   nextMsgIdx: number;
 }
 
-let snapshot: EstimationSnapshot | null = null;
+const DEFAULT_STATE_KEY = 'default';
+const snapshots: Record<string, EstimationSnapshot> = {};
 
-export function saveEstimationState(state: EstimationSnapshot) {
-  snapshot = { ...state };
+function cloneSnapshot(state: EstimationSnapshot): EstimationSnapshot {
+  return {
+    ...state,
+    messages: state.messages.map((message) => ({
+      ...message,
+      interaction: message.interaction
+        ? {
+            ...message.interaction,
+            data: JSON.parse(JSON.stringify(message.interaction.data)),
+          }
+        : undefined,
+    })),
+  };
 }
 
-export function loadEstimationState(): EstimationSnapshot | null {
-  return snapshot;
+export function saveEstimationState(state: EstimationSnapshot, key = DEFAULT_STATE_KEY) {
+  snapshots[key] = cloneSnapshot(state);
+}
+
+export function loadEstimationState(key = DEFAULT_STATE_KEY): EstimationSnapshot | null {
+  return snapshots[key] ? cloneSnapshot(snapshots[key]) : null;
 }
 
 export function getDefaultEstimationState(): EstimationSnapshot {
   return {
-    messages: mockInitialMessages,
+    messages: JSON.parse(JSON.stringify(mockInitialMessages)),
     currentPhase: 'mapping',
     nextMsgIdx: 0,
   };
 }
 
-export function clearEstimationState() {
-  snapshot = null;
+export function clearEstimationState(key?: string) {
+  if (!key) {
+    Object.keys(snapshots).forEach((snapshotKey) => {
+      delete snapshots[snapshotKey];
+    });
+    return;
+  }
+  delete snapshots[key];
 }

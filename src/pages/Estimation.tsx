@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { AppLayout } from '@/components/AppLayout';
+import { useSearchParams } from 'react-router-dom';
 import { EstimationProgressBar } from '@/components/estimation/EstimationProgressBar';
 import { ContextPanel } from '@/components/estimation/ContextPanel';
 import { ModuleMappingBlock } from '@/components/estimation/ModuleMappingBlock';
@@ -10,7 +11,7 @@ import { ScenarioSelectBlock } from '@/components/estimation/ScenarioSelectBlock
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Send, Bot } from 'lucide-react';
-import type { ChatMessage, EstimationPhase, ModuleMappingData, FactorSelectData, EffortConfirmData, CostSummaryData, ScenarioSelectData } from '@/types/estimation';
+import type { ChatMessage, InteractionBlock, EstimationPhase, ModuleMappingData, FactorSelectData, EffortConfirmData, CostSummaryData, ScenarioSelectData } from '@/types/estimation';
 import { mockFollowUpMessages } from '@/data';
 import { saveEstimationState, loadEstimationState, getDefaultEstimationState } from '@/stores/estimationStore';
 
@@ -23,7 +24,9 @@ import { saveEstimationState, loadEstimationState, getDefaultEstimationState } f
 const phaseOrder: EstimationPhase[] = ['mapping', 'factors', 'effort', 'cost', 'scenario'];
 
 export default function Estimation() {
-  const saved = loadEstimationState();
+  const [searchParams] = useSearchParams();
+  const estimationStateKey = searchParams.get('rfpId') ?? 'default';
+  const saved = loadEstimationState(estimationStateKey);
   const initial = saved ?? getDefaultEstimationState();
 
   const [messages, setMessages] = useState<ChatMessage[]>(initial.messages);
@@ -39,8 +42,8 @@ export default function Estimation() {
       messages,
       currentPhase,
       nextMsgIdx: nextMsgIdx.current,
-    });
-  }, [messages, currentPhase]);
+    }, estimationStateKey);
+  }, [messages, currentPhase, estimationStateKey]);
 
   const scrollToBottom = useCallback(() => {
     if (scrollRef.current) {
@@ -83,6 +86,16 @@ export default function Estimation() {
     advancePhase();
   }, [advancePhase]);
 
+  const updateInteractionData = useCallback((msgId: string, data: InteractionBlock['data']) => {
+    setMessages((prev) =>
+      prev.map((message) =>
+        message.id === msgId && message.interaction
+          ? { ...message, interaction: { ...message.interaction, data } }
+          : message
+      )
+    );
+  }, []);
+
   const handleSend = useCallback(() => {
     if (!inputText.trim()) return;
     const userMsg: ChatMessage = {
@@ -113,15 +126,43 @@ export default function Estimation() {
 
     switch (type) {
       case 'module-mapping':
-        return <ModuleMappingBlock data={data as ModuleMappingData} confirmed={confirmed} onConfirm={() => handleConfirm(msg.id)} />;
+        return (
+          <ModuleMappingBlock
+            data={data as ModuleMappingData}
+            confirmed={confirmed}
+            onConfirm={() => handleConfirm(msg.id)}
+            onChange={(next) => updateInteractionData(msg.id, next)}
+          />
+        );
       case 'factor-select':
-        return <FactorSelectBlock data={data as FactorSelectData} confirmed={confirmed} onConfirm={() => handleConfirm(msg.id)} />;
+        return (
+          <FactorSelectBlock
+            data={data as FactorSelectData}
+            confirmed={confirmed}
+            onConfirm={() => handleConfirm(msg.id)}
+            onChange={(next) => updateInteractionData(msg.id, next)}
+          />
+        );
       case 'effort-confirm':
-        return <EffortConfirmBlock data={data as EffortConfirmData} confirmed={confirmed} onConfirm={() => handleConfirm(msg.id)} />;
+        return (
+          <EffortConfirmBlock
+            data={data as EffortConfirmData}
+            confirmed={confirmed}
+            onConfirm={() => handleConfirm(msg.id)}
+            onChange={(next) => updateInteractionData(msg.id, next)}
+          />
+        );
       case 'cost-summary':
         return <CostSummaryBlock data={data as CostSummaryData} confirmed={confirmed} onConfirm={() => handleConfirm(msg.id)} />;
       case 'scenario-select':
-        return <ScenarioSelectBlock data={data as ScenarioSelectData} confirmed={confirmed} onConfirm={() => handleConfirm(msg.id)} />;
+        return (
+          <ScenarioSelectBlock
+            data={data as ScenarioSelectData}
+            confirmed={confirmed}
+            onConfirm={() => handleConfirm(msg.id)}
+            onChange={(next) => updateInteractionData(msg.id, next)}
+          />
+        );
       default:
         return null;
     }

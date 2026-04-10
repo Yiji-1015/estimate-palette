@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { EffortConfirmData } from '@/types/estimation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,10 +7,15 @@ interface Props {
   data: EffortConfirmData;
   confirmed: boolean;
   onConfirm: () => void;
+  onChange: (data: EffortConfirmData) => void;
 }
 
-export function EffortConfirmBlock({ data, confirmed, onConfirm }: Props) {
+export function EffortConfirmBlock({ data, confirmed, onConfirm, onChange }: Props) {
   const [lineItems, setLineItems] = useState(data.lineItems);
+
+  useEffect(() => {
+    setLineItems(data.lineItems);
+  }, [data.lineItems]);
 
   const updateEffort = (idx: number, val: string) => {
     const num = parseFloat(val);
@@ -18,6 +23,14 @@ export function EffortConfirmBlock({ data, confirmed, onConfirm }: Props) {
     const next = [...lineItems];
     next[idx] = { ...next[idx], adjustedEffort: num };
     setLineItems(next);
+    const subtotalDev = Number(next.reduce((sum, item) => sum + item.adjustedEffort, 0).toFixed(1));
+    const totalMM = Number((subtotalDev + data.pmOverhead + data.qaOverhead + data.archOverhead + data.riskOverhead).toFixed(1));
+    onChange({
+      ...data,
+      lineItems: next,
+      subtotalDev,
+      totalMM,
+    });
   };
 
   const currentSubtotal = lineItems.reduce((s, li) => s + li.adjustedEffort, 0);

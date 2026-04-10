@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ModuleMappingData } from '@/types/estimation';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -12,21 +12,28 @@ interface Props {
   data: ModuleMappingData;
   confirmed: boolean;
   onConfirm: () => void;
+  onChange: (data: ModuleMappingData) => void;
 }
 
-export function ModuleMappingBlock({ data, confirmed, onConfirm }: Props) {
+export function ModuleMappingBlock({ data, confirmed, onConfirm, onChange }: Props) {
   const [items, setItems] = useState(data.items);
+
+  useEffect(() => {
+    setItems(data.items);
+  }, [data.items]);
 
   const updateModule = (idx: number, val: string) => {
     const next = [...items];
     next[idx] = { ...next[idx], userOverride: val };
     setItems(next);
+    onChange({ items: next });
   };
 
   const updateWorkType = (idx: number, val: string) => {
     const next = [...items];
     next[idx] = { ...next[idx], userWorkTypeOverride: val as any };
     setItems(next);
+    onChange({ items: next });
   };
 
   return (

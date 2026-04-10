@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { FactorSelectData } from '@/types/estimation';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -21,15 +21,21 @@ interface Props {
   data: FactorSelectData;
   confirmed: boolean;
   onConfirm: () => void;
+  onChange: (data: FactorSelectData) => void;
 }
 
-export function FactorSelectBlock({ data, confirmed, onConfirm }: Props) {
+export function FactorSelectBlock({ data, confirmed, onConfirm, onChange }: Props) {
   const [factors, setFactors] = useState(data.factors);
+
+  useEffect(() => {
+    setFactors(data.factors);
+  }, [data.factors]);
 
   const selectLevel = (idx: number, label: string, value: number) => {
     const next = [...factors];
     next[idx] = { ...next[idx], selectedLevel: label, selectedValue: value };
     setFactors(next);
+    onChange({ factors: next });
   };
 
   return (

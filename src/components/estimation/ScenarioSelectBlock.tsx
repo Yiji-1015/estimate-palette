@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { ScenarioSelectData } from '@/types/estimation';
 import { Button } from '@/components/ui/button';
@@ -9,12 +9,17 @@ interface Props {
   data: ScenarioSelectData;
   confirmed: boolean;
   onConfirm: () => void;
+  onChange: (data: ScenarioSelectData) => void;
 }
 
-export function ScenarioSelectBlock({ data, confirmed, onConfirm }: Props) {
+export function ScenarioSelectBlock({ data, confirmed, onConfirm, onChange }: Props) {
   const [selectedId, setSelectedId] = useState<string | undefined>(data.selectedId);
   const navigate = useNavigate();
   const fmt = (n: number) => n.toLocaleString();
+
+  useEffect(() => {
+    setSelectedId(data.selectedId);
+  }, [data.selectedId]);
 
   return (
     <div className="mt-3 border border-border rounded-lg bg-card overflow-hidden">
@@ -32,7 +37,11 @@ export function ScenarioSelectBlock({ data, confirmed, onConfirm }: Props) {
                   ? 'border-primary/50 bg-background'
                   : 'border-border bg-background'
               } ${confirmed ? 'cursor-default' : 'hover:border-primary/50'}`}
-              onClick={() => !confirmed && setSelectedId(sc.id)}
+              onClick={() => {
+                if (confirmed) return;
+                setSelectedId(sc.id);
+                onChange({ ...data, selectedId: sc.id });
+              }}
             >
               <div className="flex items-center gap-2 mb-2">
                 <span className="font-semibold text-foreground">{sc.name}</span>
