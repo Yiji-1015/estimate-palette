@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { SolutionModule } from '@/types/reference';
+import { CATEGORY_MODULE_MAPPING } from '@/config/constants';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
