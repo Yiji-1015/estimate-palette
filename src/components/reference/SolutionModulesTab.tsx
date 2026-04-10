@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Pencil } from 'lucide-react';
+import { Pencil, Plus, Trash2 } from 'lucide-react';
 
 interface SolutionModulesTabProps {
   modules: SolutionModule[];
@@ -32,6 +32,28 @@ export function SolutionModulesTab({ modules, onChange }: SolutionModulesTabProp
     }
   };
 
+  const addModule = () => {
+    const newModule: SolutionModule = {
+      id: `MOD-${Date.now()}`,
+      name: '신규 모듈',
+      role: '',
+      description: '',
+      coreFeatures: [],
+      mappedCategory: '',
+    };
+    onChange([...modules, newModule]);
+    setEditingIdx(modules.length);
+    setEditForm(newModule);
+  };
+
+  const deleteModule = (id: string) => {
+    onChange(modules.filter((mod) => mod.id !== id));
+    if (editForm?.id === id) {
+      setEditingIdx(null);
+      setEditForm(null);
+    }
+  };
+
   const mappingTable = [
     { category: 'FR-DATA', description: '데이터 수집/정제/구조화', module: 'DO-MINE' },
     { category: 'FR-SEARCH', description: '검색/RAG/Retrieval', module: 'DO-SPE' },
@@ -42,6 +64,12 @@ export function SolutionModulesTab({ modules, onChange }: SolutionModulesTabProp
 
   return (
     <div className="space-y-6">
+      <div className="flex justify-end">
+        <Button variant="ghost" size="sm" className="text-primary" onClick={addModule}>
+          <Plus className="w-4 h-4 mr-1" /> 모듈 추가
+        </Button>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {modules.map((mod, idx) => (
           <div key={mod.id} className="bg-card border rounded-lg p-5 flex flex-col">
@@ -50,9 +78,14 @@ export function SolutionModulesTab({ modules, onChange }: SolutionModulesTabProp
                 <h3 className="font-bold text-lg text-foreground">{mod.name}</h3>
                 <p className="text-sm text-muted-foreground">{mod.role}</p>
               </div>
-              <Button variant="ghost" size="sm" onClick={() => openEdit(idx)}>
-                <Pencil className="w-4 h-4" />
-              </Button>
+              <div className="flex items-center gap-1">
+                <Button variant="ghost" size="sm" onClick={() => openEdit(idx)}>
+                  <Pencil className="w-4 h-4" />
+                </Button>
+                <Button variant="ghost" size="sm" onClick={() => deleteModule(mod.id)}>
+                  <Trash2 className="w-4 h-4 text-destructive" />
+                </Button>
+              </div>
             </div>
             <p className="text-sm text-foreground mb-3">{mod.description}</p>
             <div className="flex flex-wrap gap-1.5 mb-3">

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { EffortItem } from '@/types/reference';
-import { Plus, RotateCcw } from 'lucide-react';
+import { Plus, RotateCcw, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
@@ -107,6 +107,10 @@ export function EffortTable({ items, onChange, onRestore }: EffortTableProps) {
     onChange([...items, { id: newId, task: '새 항목', newBuild: 0, customize: 0, configOnly: 0, note: '' }]);
   };
 
+  const deleteRow = (id: string) => {
+    onChange(items.filter((item) => item.id !== id));
+  };
+
   return (
     <div>
       <div className="flex justify-end mb-2">
@@ -115,20 +119,23 @@ export function EffortTable({ items, onChange, onRestore }: EffortTableProps) {
         </button>
       </div>
       <div className="overflow-x-auto">
-        <table className="w-full text-sm">
+        <table className="w-full min-w-[920px] text-sm table-auto">
           <thead>
             <tr className="border-b bg-muted/50">
               <th className="text-left py-2 px-3 font-medium text-muted-foreground">작업 항목</th>
-              <th className="text-center py-2 px-3 font-medium text-muted-foreground">신규 구축(M/M)</th>
-              <th className="text-center py-2 px-3 font-medium text-muted-foreground">커스터마이징(M/M)</th>
-              <th className="text-center py-2 px-3 font-medium text-muted-foreground">설정/연동만(M/M)</th>
+              <th className="text-center py-2 px-3 font-medium text-muted-foreground w-36">신규 구축(M/M)</th>
+              <th className="text-center py-2 px-3 font-medium text-muted-foreground w-40">커스터마이징(M/M)</th>
+              <th className="text-center py-2 px-3 font-medium text-muted-foreground w-36">설정/연동만(M/M)</th>
               <th className="text-left py-2 px-3 font-medium text-muted-foreground">비고</th>
+              <th className="text-center py-2 px-3 font-medium text-muted-foreground w-14">관리</th>
             </tr>
           </thead>
           <tbody>
             {items.map((item, idx) => (
-              <tr key={item.id} className="border-b hover:bg-table-hover transition-colors">
-                <td className="py-2 px-3 text-foreground">{item.task}</td>
+              <tr key={item.id} className="border-b hover:bg-table-hover transition-colors group">
+                <td className="py-2 px-3 text-foreground">
+                  <EditableTextCell value={item.task} onChange={(v) => updateItem(idx, 'task', v)} />
+                </td>
                 <td className="py-2 px-3 text-center">
                   <EditableNumberCell value={item.newBuild} onChange={(v) => updateItem(idx, 'newBuild', v)} />
                 </td>
@@ -138,8 +145,17 @@ export function EffortTable({ items, onChange, onRestore }: EffortTableProps) {
                 <td className="py-2 px-3 text-center">
                   <EditableNumberCell value={item.configOnly} onChange={(v) => updateItem(idx, 'configOnly', v)} />
                 </td>
-                <td className="py-2 px-3">
+                <td className="py-2 px-3 text-left">
                   <EditableTextCell value={item.note} onChange={(v) => updateItem(idx, 'note', v)} />
+                </td>
+                <td className="py-2 px-3 text-center">
+                  <button
+                    className="opacity-60 hover:opacity-100 transition-opacity text-destructive"
+                    onClick={() => deleteRow(item.id)}
+                    aria-label="작업 항목 삭제"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
                 </td>
               </tr>
             ))}

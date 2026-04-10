@@ -18,6 +18,21 @@ export default function RfpAnalysis() {
   const [analysisData, setAnalysisData] = useState<RfpAnalysisData>(() =>
     JSON.parse(JSON.stringify(mockRfpAnalysis))
   );
+  const handleStartAnalysis = (
+    file: { name: string; size: number; type: string },
+    docType: RfpAnalysisData['meta']['docType']
+  ) => {
+    setAnalysisData((prev) => ({
+      ...prev,
+      meta: {
+        ...prev.meta,
+        fileName: file.name,
+        docType,
+        analyzedAt: new Date().toISOString(),
+      },
+    }));
+    setCurrentSubStep(1);
+  };
 
   const rfpDoc = useMemo<RfpDocInfo | null>(() => {
     if (currentSubStep === 0) return null;
@@ -79,7 +94,7 @@ export default function RfpAnalysis() {
         <div className="flex-1 overflow-auto px-8 py-6">
           {currentSubStep === 0 && (
             <UploadStep
-              onStartAnalysis={() => setCurrentSubStep(1)}
+              onStartAnalysis={handleStartAnalysis}
             />
           )}
           {currentSubStep === 1 && (

@@ -167,7 +167,7 @@ export function RequirementsStep({ data, onChange }: RequirementsStepProps) {
                     { label: '예산', value: data.projectInfo.budget, source: data.projectInfo.source, status: data.projectInfo.budgetStatus },
                     { label: '기간', value: data.projectInfo.duration, source: data.projectInfo.source, status: '확정' as const },
                     { label: '평가방법', value: data.projectInfo.evaluationMethod, source: data.projectInfo.source, status: '확정' as const },
-                  ].map(row => (
+                  ].filter((row) => String(row.value ?? '').trim().length > 0).map(row => (
                     <tr key={row.label} className="border-b hover:bg-table-hover transition-colors">
                       <td className="py-2 px-3 font-medium text-foreground">{row.label}</td>
                       <td className="py-2 px-3 text-foreground">{row.value}</td>

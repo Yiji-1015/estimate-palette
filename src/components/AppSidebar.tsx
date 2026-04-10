@@ -17,7 +17,7 @@ const steps = [
 
 export interface RfpDocInfo {
   fileName: string;
-  client: string;
+  client?: string;
   docType: string;
   status: '업로드 전' | '분석 중' | '분석 완료' | '확정';
 }
@@ -69,9 +69,11 @@ export function AppSidebar({ currentStep = 1, rfpDoc }: AppSidebarProps) {
           <p className="text-sm font-medium text-[hsl(var(--sidebar-fg))] truncate" title={rfpDoc.fileName}>
             {rfpDoc.fileName}
           </p>
-          <p className="text-xs text-[hsl(var(--sidebar-muted))] mt-1 truncate">
-            {rfpDoc.client}
-          </p>
+          {rfpDoc.client?.trim() && (
+            <p className="text-xs text-[hsl(var(--sidebar-muted))] mt-1 truncate">
+              {rfpDoc.client}
+            </p>
+          )}
           <div className="flex items-center gap-2 mt-2">
             <span className="text-xs text-[hsl(var(--sidebar-muted))]">{rfpDoc.docType}</span>
             <span className="ml-auto text-xs px-1.5 py-0.5 rounded-full bg-[hsl(var(--sidebar-active))] text-[hsl(var(--sidebar-fg))]">

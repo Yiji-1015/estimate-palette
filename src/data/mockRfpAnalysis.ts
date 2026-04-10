@@ -10,7 +10,7 @@ export const mockRfpAnalysis: RfpAnalysisData = {
   },
   projectInfo: {
     projectName: "DS Assistant 고도화 및 Gen to Agentic AI 서비스 플랫폼 구축",
-    client: "삼성전자 DS사업부",
+    client: "",
     projectType: "민간",
     buildType: "혼합",
     budget: "18,000만원 ~ 20,000만원",
