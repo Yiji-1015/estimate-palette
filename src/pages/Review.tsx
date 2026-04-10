@@ -25,6 +25,7 @@ import { Download, ChevronDown, ChevronRight, CheckCircle2, AlertTriangle } from
 import { toast } from 'sonner';
 import { mockEstimateSheet, mockMinimalSheet, mockExtendedSheet, mockEvidenceMap } from '@/data';
 import { CostTable } from '@/components/review/CostTable';
+import { getRfpDoc } from '@/stores/rfpStore';
 import { GanttChart } from '@/components/review/GanttChart';
 import { EvidencePanel, ModulePieChart } from '@/components/review/EvidencePanel';
 import type { EstimateLineItem, EstimateSheet } from '@/types/review';
@@ -103,7 +104,7 @@ export default function Review() {
     sheet.overheadItems.reduce((s, o) => s + o.effort, 0);
 
   return (
-    <AppLayout currentStep={4} rfpDoc={{ fileName: `${sheet.projectName}.pdf`, client: sheet.client, docType: 'RFP', status: isConfirmed ? '확정' : '리뷰 중' }}>
+    <AppLayout currentStep={4} rfpDoc={getRfpDoc() ?? { fileName: `${sheet.projectName}.pdf`, client: sheet.client, docType: 'RFP', status: isConfirmed ? '확정' : '리뷰 중' }}>
       <div className="flex flex-col h-screen">
         {/* Top bar */}
         <div className="flex items-center justify-between px-6 py-3 border-b border-border bg-card">

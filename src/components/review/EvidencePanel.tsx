@@ -27,10 +27,10 @@ export function ModulePieChart({ lineItems }: ModuleChartProps) {
   return (
     <div>
       <h4 className="text-sm font-medium text-foreground mb-3">모듈별 공수 비율</h4>
-      <div className="h-48">
+      <div className="w-full aspect-square max-h-[280px]">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
-            <Pie data={data} cx="50%" cy="50%" innerRadius={40} outerRadius={70} dataKey="value" nameKey="name" label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} labelLine={false} fontSize={11}>
+            <Pie data={data} cx="50%" cy="50%" innerRadius="30%" outerRadius="55%" dataKey="value" nameKey="name" label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} labelLine={false} fontSize={12}>
               {data.map((entry, idx) => (
                 <Cell key={idx} fill={entry.color} />
               ))}
