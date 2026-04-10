@@ -66,7 +66,7 @@ export default function RfpAnalysis() {
                   <div
                     className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium transition-colors ${
                       idx < currentSubStep
-                        ? 'bg-emerald-500 text-primary-foreground'
+                        ? 'bg-status-confirmed text-primary-foreground'
                         : idx === currentSubStep
                         ? 'bg-primary text-primary-foreground'
                         : 'bg-muted text-muted-foreground'
@@ -83,7 +83,7 @@ export default function RfpAnalysis() {
                   </span>
                 </div>
                 {idx < subSteps.length - 1 && (
-                  <div className={`w-12 h-px mx-3 ${idx < currentSubStep ? 'bg-emerald-500' : 'bg-border'}`} />
+                  <div className={`w-12 h-px mx-3 ${idx < currentSubStep ? 'bg-status-confirmed' : 'bg-border'}`} />
                 )}
               </div>
             ))}

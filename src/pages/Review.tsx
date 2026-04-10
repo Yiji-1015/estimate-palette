@@ -28,15 +28,16 @@ import { CostTable } from '@/components/review/CostTable';
 import { GanttChart } from '@/components/review/GanttChart';
 import { EvidencePanel, ModulePieChart } from '@/components/review/EvidencePanel';
 import type { EstimateLineItem, EstimateSheet } from '@/types/review';
+import { SCENARIO_NAMES } from '@/config/constants';
 
 const scenarioSheets: Record<string, EstimateSheet> = {
-  '필수충족안': mockMinimalSheet,
-  '권장안': mockEstimateSheet,
-  '확장안': mockExtendedSheet,
+  [SCENARIO_NAMES.minimal]: mockMinimalSheet,
+  [SCENARIO_NAMES.recommended]: mockEstimateSheet,
+  [SCENARIO_NAMES.extended]: mockExtendedSheet,
 };
 
 export default function Review() {
-  const [scenarioKey, setScenarioKey] = useState('권장안');
+  const [scenarioKey, setScenarioKey] = useState<string>(SCENARIO_NAMES.recommended);
   const [sheet, setSheet] = useState<EstimateSheet>({ ...mockEstimateSheet });
   const [selectedItem, setSelectedItem] = useState<EstimateLineItem | null>(null);
   const [isConfirmed, setIsConfirmed] = useState(false);
@@ -110,7 +111,7 @@ export default function Review() {
             <h1 className="text-lg font-bold text-foreground">리뷰 & 확정</h1>
             <Badge className="bg-primary/10 text-primary hover:bg-primary/10">{sheet.scenarioTag}</Badge>
             {isConfirmed && (
-              <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 gap-1">
+              <Badge className="bg-status-confirmed-bg text-status-confirmed-foreground hover:bg-status-confirmed-bg gap-1">
                 <CheckCircle2 className="w-3 h-3" /> 확정됨 {sheet.createdAt}
               </Badge>
             )}
@@ -261,7 +262,7 @@ export default function Review() {
                             <tr key={r.id} className="border-b border-border">
                               <td className="px-2 py-1.5 text-sm">{r.description}</td>
                               <td className="px-2 py-1.5 text-center">
-                                <Badge variant="outline" className={`text-[10px] ${r.impact === '상' ? 'border-destructive text-destructive' : 'border-orange-400 text-orange-600'}`}>
+                                <Badge variant="outline" className={`text-[10px] ${r.impact === '상' ? 'border-destructive text-destructive' : 'border-status-warning text-status-warning'}`}>
                                   {r.impact}
                                 </Badge>
                               </td>
@@ -291,7 +292,7 @@ export default function Review() {
                   <ModulePieChart lineItems={sheet.lineItems} />
                   <div className="mt-6 flex gap-6 text-sm">
                     <div className="text-center">
-                      <div className="text-lg font-bold text-emerald-600">{sheet.lineItems.filter(l => l.status === '확정').length}</div>
+                      <div className="text-lg font-bold text-status-confirmed-foreground">{sheet.lineItems.filter(l => l.status === '확정').length}</div>
                       <div className="text-xs text-muted-foreground">확정</div>
                     </div>
                     <div className="text-center">
@@ -316,8 +317,8 @@ export default function Review() {
                 <div className="flex justify-between"><span>선택 시나리오</span><span className="font-medium text-foreground">{sheet.scenarioName}</span></div>
                 <div className="flex justify-between"><span>총 공수</span><span className="font-medium text-foreground">{totalEffort.toFixed(1)} M/M</span></div>
                 <div className="flex justify-between"><span>제안가</span><span className="font-medium text-foreground">{sheet.proposalPrice.toLocaleString()}만원</span></div>
-                {estimatedCount > 0 && (
-                  <div className="flex justify-between"><span>추정 상태 항목</span><span className="font-medium text-orange-600">{estimatedCount}건</span></div>
+                 {estimatedCount > 0 && (
+                   <div className="flex justify-between"><span>추정 상태 항목</span><span className="font-medium text-status-warning">{estimatedCount}건</span></div>
                 )}
               </div>
             </AlertDialogDescription>
@@ -334,7 +335,7 @@ export default function Review() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5 text-orange-500" /> 추정 항목 안내
+              <AlertTriangle className="w-5 h-5 text-status-warning" /> 추정 항목 안내
             </AlertDialogTitle>
             <AlertDialogDescription>
               추정 상태인 항목이 {estimatedCount}건 있습니다. 확정 전 검토를 권장합니다.

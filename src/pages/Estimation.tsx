@@ -14,14 +14,13 @@ import { Send, Bot } from 'lucide-react';
 import type { ChatMessage, InteractionBlock, EstimationPhase, ModuleMappingData, FactorSelectData, EffortConfirmData, CostSummaryData, ScenarioSelectData } from '@/types/estimation';
 import { mockFollowUpMessages } from '@/data';
 import { saveEstimationState, loadEstimationState, getDefaultEstimationState } from '@/stores/estimationStore';
+import { ESTIMATION_PHASE_ORDER } from '@/config/constants';
 
 // TODO: API 연동 시 아래로 교체
 // POST /api/estimation/:rfpId/start → 견적 산정 시작
 // GET  /api/estimation/:rfpId → 현재 진행 상태 + 전체 결과 조회
 // PUT  /api/estimation/:rfpId/phase/:phase → 단계별 사용자 선택/수정 저장
 // POST /api/estimation/:rfpId/confirm → 시나리오 확정 → Step 4 진행 가능
-
-const phaseOrder: EstimationPhase[] = ['mapping', 'factors', 'effort', 'cost', 'scenario'];
 
 export default function Estimation() {
   const [searchParams] = useSearchParams();
@@ -56,9 +55,9 @@ export default function Estimation() {
   }, [messages, scrollToBottom]);
 
   const advancePhase = useCallback(() => {
-    const idx = phaseOrder.indexOf(currentPhase);
-    if (idx < phaseOrder.length - 1) {
-      const nextPhase = phaseOrder[idx + 1];
+    const idx = ESTIMATION_PHASE_ORDER.indexOf(currentPhase as typeof ESTIMATION_PHASE_ORDER[number]);
+    if (idx < ESTIMATION_PHASE_ORDER.length - 1) {
+      const nextPhase = ESTIMATION_PHASE_ORDER[idx + 1] as EstimationPhase;
       setCurrentPhase(nextPhase);
 
       setIsTyping(true);

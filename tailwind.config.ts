@@ -60,6 +60,16 @@ export default {
         "table-hover": "hsl(var(--table-hover))",
         "warning-dot": "hsl(var(--warning-dot))",
         "highlight-row": "hsl(var(--highlight-row))",
+        "status-confirmed": {
+          DEFAULT: "hsl(var(--status-confirmed))",
+          foreground: "hsl(var(--status-confirmed-foreground))",
+          bg: "hsl(var(--status-confirmed-bg))",
+        },
+        "status-estimated": {
+          foreground: "hsl(var(--status-estimated-foreground))",
+          bg: "hsl(var(--status-estimated-bg))",
+        },
+        "status-warning": "hsl(var(--status-warning))",
       },
       borderRadius: {
         lg: "var(--radius)",

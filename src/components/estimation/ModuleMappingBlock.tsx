@@ -89,7 +89,7 @@ export function ModuleMappingBlock({ data, confirmed, onConfirm, onChange }: Pro
         </div>
       )}
       {confirmed && (
-        <div className="p-3 border-t border-border bg-muted/30 text-center text-sm text-emerald-600 font-medium">
+        <div className="p-3 border-t border-border bg-muted/30 text-center text-sm text-status-confirmed-foreground font-medium">
           ✅ 매핑 확인 완료
         </div>
       )}
