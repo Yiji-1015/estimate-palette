@@ -107,12 +107,9 @@ export default function Review() {
     sheet.overheadItems.reduce((s, o) => s + o.effort, 0);
 
   const baseRfpDoc = getRfpDoc(rfpKey);
-  const sidebarRfpDoc = {
-    fileName: baseRfpDoc?.fileName ?? `${sheet.projectName}.pdf`,
-    client: baseRfpDoc?.client ?? sheet.client,
-    docType: baseRfpDoc?.docType ?? 'RFP',
-    status: isConfirmed ? '확정' : '리뷰 중',
-  } as const;
+  const sidebarRfpDoc = baseRfpDoc
+    ? { ...baseRfpDoc, status: isConfirmed ? '확정' as const : '리뷰 중' as const }
+    : null;
 
   return (
     <AppLayout currentStep={4} rfpDoc={sidebarRfpDoc}>
