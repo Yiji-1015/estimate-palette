@@ -1,0 +1,6 @@
+services:
+  web:
+    build: .
+    image: estimate-palette:latest
+    ports:
+      - "8000:80"
