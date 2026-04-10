@@ -21,7 +21,7 @@ export interface ModuleMappingItem {
   reqSummary: string;
   suggestedModule: string;
   workType: '신규 구축' | '커스터마이징' | '설정/연동만';
-  confidence: 'high' | 'medium' | 'low';
+  
   userOverride?: string;
   userWorkTypeOverride?: string;
 }

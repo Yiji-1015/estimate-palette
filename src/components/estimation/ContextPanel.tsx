@@ -112,22 +112,22 @@ function RequirementsList() {
     <div className="space-y-1">
       <h3 className="text-sm font-semibold text-foreground mb-2">확정 요구사항 ({reqs.length}건)</h3>
       <div className="overflow-x-auto">
-        <table className="w-full text-xs">
+        <table className="w-full text-xs table-fixed">
           <thead>
             <tr className="border-b border-border">
-              <th className="py-1 text-left font-medium text-muted-foreground">ID</th>
-              <th className="py-1 text-left font-medium text-muted-foreground">원문 요약</th>
-              <th className="py-1 text-left font-medium text-muted-foreground">카테고리</th>
-              <th className="py-1 text-left font-medium text-muted-foreground">우선순위</th>
+              <th className="px-2 py-1.5 text-left font-medium text-muted-foreground w-[18%]">ID</th>
+              <th className="px-2 py-1.5 text-left font-medium text-muted-foreground w-[42%]">원문 요약</th>
+              <th className="px-2 py-1.5 text-left font-medium text-muted-foreground w-[22%]">카테고리</th>
+              <th className="px-2 py-1.5 text-left font-medium text-muted-foreground w-[18%]">우선순위</th>
             </tr>
           </thead>
           <tbody>
             {reqs.map(r => (
               <tr key={r.id} className="border-b border-border last:border-0 hover:bg-muted/30">
-                <td className="py-1.5 font-mono text-muted-foreground">{r.id}</td>
-                <td className="py-1.5 text-foreground max-w-[150px] truncate" title={r.originalText}>{r.originalText}</td>
-                <td className="py-1.5 text-muted-foreground">{r.category}</td>
-                <td className="py-1.5">
+                <td className="px-2 py-1.5 font-mono text-muted-foreground">{r.id}</td>
+                <td className="px-2 py-1.5 text-foreground truncate" title={r.originalText}>{r.originalText}</td>
+                <td className="px-2 py-1.5 text-muted-foreground">{r.category}</td>
+                <td className="px-2 py-1.5">
                   <span className={`px-1.5 py-0.5 rounded text-[10px] ${
                     r.priority === '필수' ? 'bg-destructive/10 text-destructive' : 'bg-muted text-muted-foreground'
                   }`}>{r.priority}</span>

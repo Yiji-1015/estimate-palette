@@ -25,28 +25,28 @@ export function EffortConfirmBlock({ data, confirmed, onConfirm }: Props) {
   return (
     <div className="mt-3 border border-border rounded-lg bg-card overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full text-sm">
+        <table className="w-full text-sm table-fixed">
           <thead>
             <tr className="border-b border-border bg-muted/50">
-              <th className="px-2 py-2 text-left font-medium text-muted-foreground text-xs">요구사항</th>
-              <th className="px-2 py-2 text-left font-medium text-muted-foreground text-xs">모듈</th>
-              <th className="px-2 py-2 text-left font-medium text-muted-foreground text-xs">작업유형</th>
-              <th className="px-2 py-2 text-right font-medium text-muted-foreground text-xs">기준</th>
-              <th className="px-2 py-2 text-right font-medium text-muted-foreground text-xs">조정</th>
-              <th className="px-2 py-2 text-left font-medium text-muted-foreground text-xs">산출식</th>
+              <th className="px-3 py-2 text-left font-medium text-muted-foreground text-xs w-[28%]">요구사항</th>
+              <th className="px-3 py-2 text-left font-medium text-muted-foreground text-xs w-[12%]">모듈</th>
+              <th className="px-3 py-2 text-left font-medium text-muted-foreground text-xs w-[12%]">작업유형</th>
+              <th className="px-3 py-2 text-right font-medium text-muted-foreground text-xs w-[8%]">기준</th>
+              <th className="px-3 py-2 text-right font-medium text-muted-foreground text-xs w-[10%]">조정</th>
+              <th className="px-3 py-2 text-left font-medium text-muted-foreground text-xs w-[30%]">산출식</th>
             </tr>
           </thead>
           <tbody>
             {lineItems.map((li, idx) => (
               <tr key={li.reqId} className="border-b border-border last:border-0 hover:bg-muted/30">
-                <td className="px-2 py-1.5">
+                <td className="px-3 py-2">
                   <span className="font-mono text-xs text-muted-foreground mr-1">{li.reqId}</span>
                   <span className="text-xs text-foreground">{li.reqSummary}</span>
                 </td>
-                <td className="px-2 py-1.5 text-xs text-foreground">{li.module}</td>
-                <td className="px-2 py-1.5 text-xs text-foreground">{li.workType}</td>
-                <td className="px-2 py-1.5 text-right text-xs text-muted-foreground">{li.baseEffort}</td>
-                <td className="px-2 py-1.5 text-right">
+                <td className="px-3 py-2 text-xs text-foreground">{li.module}</td>
+                <td className="px-3 py-2 text-xs text-foreground">{li.workType}</td>
+                <td className="px-3 py-2 text-right text-xs text-muted-foreground">{li.baseEffort}</td>
+                <td className="px-3 py-2 text-right">
                   {!confirmed && li.editable ? (
                     <Input
                       type="number"
@@ -59,7 +59,7 @@ export function EffortConfirmBlock({ data, confirmed, onConfirm }: Props) {
                     <span className="text-xs font-semibold text-foreground">{li.adjustedEffort}</span>
                   )}
                 </td>
-                <td className="px-2 py-1.5 text-[11px] text-muted-foreground max-w-[200px] truncate" title={li.adjustmentDetail}>
+                <td className="px-3 py-2 text-[11px] text-muted-foreground truncate" title={li.adjustmentDetail}>
                   {li.adjustmentDetail}
                 </td>
               </tr>
