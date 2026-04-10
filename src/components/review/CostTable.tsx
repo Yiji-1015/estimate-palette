@@ -112,7 +112,7 @@ export function CostTable({
               <td className="px-2 py-2 text-right text-sm">{li.unitCost.toLocaleString()}</td>
               <td className="px-2 py-2 text-right text-sm font-medium">{li.cost.toLocaleString()}</td>
               <td className="px-2 py-2 text-center">
-                <Badge variant={li.status === '확정' ? 'default' : 'secondary'} className={`text-[10px] px-1.5 py-0 ${li.status === '확정' ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-100' : 'bg-primary/10 text-primary hover:bg-primary/10'}`}>
+                <Badge variant={li.status === '확정' ? 'default' : 'secondary'} className={`text-[10px] px-1.5 py-0 ${li.status === '확정' ? 'bg-status-confirmed-bg text-status-confirmed-foreground hover:bg-status-confirmed-bg' : 'bg-status-estimated-bg text-status-estimated-foreground hover:bg-status-estimated-bg'}`}>
                   {li.status}
                 </Badge>
               </td>

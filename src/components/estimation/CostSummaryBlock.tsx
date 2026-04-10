@@ -48,9 +48,9 @@ export function CostSummaryBlock({ data, confirmed, onConfirm }: Props) {
         <div className="mt-2 flex items-center gap-2">
           <span className="text-sm text-muted-foreground">고객 예산:</span>
           <span className="text-sm font-medium text-foreground">{data.budgetRange}만원</span>
-          {data.budgetFit === 'within' && <span className="text-emerald-600 text-sm">✅ 예산 범위 내</span>}
+          {data.budgetFit === 'within' && <span className="text-status-confirmed-foreground text-sm">✅ 예산 범위 내</span>}
           {data.budgetFit === 'over' && <span className="text-destructive text-sm">⚠️ 예산 초과</span>}
-          {data.budgetFit === 'under' && <span className="text-amber-600 text-sm">💡 예산 미만</span>}
+          {data.budgetFit === 'under' && <span className="text-status-warning text-sm">💡 예산 미만</span>}
         </div>
       </div>
       {!confirmed && (
@@ -59,7 +59,7 @@ export function CostSummaryBlock({ data, confirmed, onConfirm }: Props) {
         </div>
       )}
       {confirmed && (
-        <div className="p-3 border-t border-border text-center text-sm text-emerald-600 font-medium">
+        <div className="p-3 border-t border-border text-center text-sm text-status-confirmed-foreground font-medium">
           ✅ 비용 확인 완료
         </div>
       )}

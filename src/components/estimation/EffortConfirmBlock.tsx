@@ -103,7 +103,7 @@ export function EffortConfirmBlock({ data, confirmed, onConfirm, onChange }: Pro
         </div>
       )}
       {confirmed && (
-        <div className="p-3 border-t border-border text-center text-sm text-emerald-600 font-medium">
+        <div className="p-3 border-t border-border text-center text-sm text-status-confirmed-foreground font-medium">
           ✅ 공수 확인 완료
         </div>
       )}

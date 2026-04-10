@@ -111,7 +111,7 @@ export default function Review() {
             <h1 className="text-lg font-bold text-foreground">리뷰 & 확정</h1>
             <Badge className="bg-primary/10 text-primary hover:bg-primary/10">{sheet.scenarioTag}</Badge>
             {isConfirmed && (
-              <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 gap-1">
+              <Badge className="bg-status-confirmed-bg text-status-confirmed-foreground hover:bg-status-confirmed-bg gap-1">
                 <CheckCircle2 className="w-3 h-3" /> 확정됨 {sheet.createdAt}
               </Badge>
             )}
@@ -292,7 +292,7 @@ export default function Review() {
                   <ModulePieChart lineItems={sheet.lineItems} />
                   <div className="mt-6 flex gap-6 text-sm">
                     <div className="text-center">
-                      <div className="text-lg font-bold text-emerald-600">{sheet.lineItems.filter(l => l.status === '확정').length}</div>
+                      <div className="text-lg font-bold text-status-confirmed-foreground">{sheet.lineItems.filter(l => l.status === '확정').length}</div>
                       <div className="text-xs text-muted-foreground">확정</div>
                     </div>
                     <div className="text-center">
@@ -317,8 +317,8 @@ export default function Review() {
                 <div className="flex justify-between"><span>선택 시나리오</span><span className="font-medium text-foreground">{sheet.scenarioName}</span></div>
                 <div className="flex justify-between"><span>총 공수</span><span className="font-medium text-foreground">{totalEffort.toFixed(1)} M/M</span></div>
                 <div className="flex justify-between"><span>제안가</span><span className="font-medium text-foreground">{sheet.proposalPrice.toLocaleString()}만원</span></div>
-                {estimatedCount > 0 && (
-                  <div className="flex justify-between"><span>추정 상태 항목</span><span className="font-medium text-orange-600">{estimatedCount}건</span></div>
+                 {estimatedCount > 0 && (
+                   <div className="flex justify-between"><span>추정 상태 항목</span><span className="font-medium text-status-warning">{estimatedCount}건</span></div>
                 )}
               </div>
             </AlertDialogDescription>
