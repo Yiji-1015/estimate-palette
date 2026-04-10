@@ -36,7 +36,7 @@ export function AppSidebar({ currentStep = 1, rfpDoc }: AppSidebarProps) {
     <aside className="w-60 min-h-screen flex flex-col bg-[hsl(var(--sidebar-bg))] text-[hsl(var(--sidebar-fg))]">
       {/* Logo */}
       <div className="px-6 py-5 border-b border-[hsl(var(--sidebar-hover))]">
-        <span className="font-bold text-xl tracking-tight">LLOYDK</span>
+        <span className="font-bold text-xl tracking-tight">{APP_CONFIG.name}</span>
       </div>
 
       {/* Navigation */}
