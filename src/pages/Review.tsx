@@ -101,7 +101,7 @@ export default function Review() {
     sheet.overheadItems.reduce((s, o) => s + o.effort, 0);
 
   return (
-    <AppLayout currentStep={4} rfpDoc={{ fileName: 'DS_Assistant_RFP_v2.1.pdf', client: '삼성전자 DS사업부', docType: 'RFP', status: '확정' }}>
+    <AppLayout currentStep={4} rfpDoc={{ fileName: `${sheet.projectName}.pdf`, client: sheet.client, docType: 'RFP', status: isConfirmed ? '확정' : '리뷰 중' }}>
       <div className="flex flex-col h-screen">
         {/* Top bar */}
         <div className="flex items-center justify-between px-6 py-3 border-b border-border bg-card">
