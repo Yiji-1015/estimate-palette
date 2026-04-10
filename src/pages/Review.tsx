@@ -28,15 +28,16 @@ import { CostTable } from '@/components/review/CostTable';
 import { GanttChart } from '@/components/review/GanttChart';
 import { EvidencePanel, ModulePieChart } from '@/components/review/EvidencePanel';
 import type { EstimateLineItem, EstimateSheet } from '@/types/review';
+import { SCENARIO_NAMES } from '@/config/constants';
 
 const scenarioSheets: Record<string, EstimateSheet> = {
-  '필수충족안': mockMinimalSheet,
-  '권장안': mockEstimateSheet,
-  '확장안': mockExtendedSheet,
+  [SCENARIO_NAMES.minimal]: mockMinimalSheet,
+  [SCENARIO_NAMES.recommended]: mockEstimateSheet,
+  [SCENARIO_NAMES.extended]: mockExtendedSheet,
 };
 
 export default function Review() {
-  const [scenarioKey, setScenarioKey] = useState('권장안');
+  const [scenarioKey, setScenarioKey] = useState(SCENARIO_NAMES.recommended);
   const [sheet, setSheet] = useState<EstimateSheet>({ ...mockEstimateSheet });
   const [selectedItem, setSelectedItem] = useState<EstimateLineItem | null>(null);
   const [isConfirmed, setIsConfirmed] = useState(false);
