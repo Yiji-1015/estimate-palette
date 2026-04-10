@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { EstimationPhase } from '@/types/estimation';
-import { mockRfpAnalysis } from '@/data/mockRfpAnalysis';
+import { mockRfpAnalysis } from '@/data';
 
 interface Props {
   currentPhase: EstimationPhase;

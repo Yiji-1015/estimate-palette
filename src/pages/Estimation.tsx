@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Send, Bot } from 'lucide-react';
 import type { ChatMessage, EstimationPhase, ModuleMappingData, FactorSelectData, EffortConfirmData, CostSummaryData, ScenarioSelectData } from '@/types/estimation';
-import { mockInitialMessages, mockFollowUpMessages } from '@/data/mockEstimation';
+import { mockInitialMessages, mockFollowUpMessages } from '@/data';
 
 // TODO: API 연동 시 아래로 교체
 // POST /api/estimation/:rfpId/start → 견적 산정 시작
