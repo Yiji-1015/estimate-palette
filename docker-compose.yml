@@ -1,6 +1,9 @@
 services:
   web:
-    build: .
+    build:
+      context: .
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-}
     image: estimate-palette:latest
     ports:
       - "8000:80"

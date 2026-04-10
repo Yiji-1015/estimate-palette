@@ -4,18 +4,18 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface UploadStepProps {
-  onStartAnalysis: (file: { name: string; size: number; type: string }, docType: string) => void;
+  onStartAnalysis: (file: File, docType: string) => void;
   // TODO: API 연동 시 아래로 교체
   // onStartAnalysis → POST /api/rfp/upload (multipart/form-data)로 파일 업로드 + 분석 시작
 }
 
 export function UploadStep({ onStartAnalysis }: UploadStepProps) {
-  const [file, setFile] = useState<{ name: string; size: number; type: string } | null>(null);
+  const [file, setFile] = useState<File | null>(null);
   const [docType, setDocType] = useState<string>('');
   const [dragOver, setDragOver] = useState(false);
 
   const handleFile = (f: File) => {
-    setFile({ name: f.name, size: f.size, type: f.type });
+    setFile(f);
   };
 
   const handleDrop = useCallback((e: React.DragEvent) => {

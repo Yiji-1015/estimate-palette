@@ -11,7 +11,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { ChevronDown, ChevronUp, Plus, Trash2, AlertTriangle } from 'lucide-react';
 import { toast } from 'sonner';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const statusColors: Record<RequirementStatus, string> = {
   '확정': 'bg-emerald-500/10 text-emerald-600 border-0',
@@ -45,6 +45,7 @@ interface RequirementsStepProps {
 
 export function RequirementsStep({ data, onChange }: RequirementsStepProps) {
   const navigate = useNavigate();
+  const { projectId } = useParams();
   const [activeType, setActiveType] = useState<RequirementType | 'ALL'>('ALL');
   const [selectedReq, setSelectedReq] = useState<Requirement | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -125,7 +126,7 @@ export function RequirementsStep({ data, onChange }: RequirementsStepProps) {
   const handleConfirm = () => {
     setConfirmOpen(false);
     toast.success('요구사항 확정', { description: '견적 산정으로 이동합니다.' });
-    navigate('/estimation');
+    navigate(projectId ? `/projects/${projectId}/estimation` : '/reference');
     // TODO: API 연동 시 아래로 교체
     // await fetch(`/api/rfp/${id}/confirm`, { method: 'POST' });
   };

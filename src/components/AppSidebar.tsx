@@ -105,7 +105,7 @@ export function AppSidebar({ rfpDoc }: AppSidebarProps) {
   const refreshProjects = () => setProjects(getProjects());
 
   const handleCreateProject = () => {
-    if (!newName.trim()) return;
+    if (!newName.trim() || !newClient.trim()) return;
     const proj = addProject(newName.trim(), newClient.trim());
     if (!proj) return;
     setNewDialogOpen(false);
@@ -356,7 +356,7 @@ export function AppSidebar({ rfpDoc }: AppSidebarProps) {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setNewDialogOpen(false)}>취소</Button>
-            <Button onClick={handleCreateProject} disabled={!newName.trim()}>생성</Button>
+            <Button onClick={handleCreateProject} disabled={!newName.trim() || !newClient.trim()}>생성</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

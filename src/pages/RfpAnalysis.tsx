@@ -23,7 +23,7 @@ export default function RfpAnalysis() {
     JSON.parse(JSON.stringify(mockRfpAnalysis))
   );
   const handleStartAnalysis = (
-    file: { name: string; size: number; type: string },
+    file: File,
     docType: RfpAnalysisData['meta']['docType']
   ) => {
     setAnalysisData((prev) => ({
