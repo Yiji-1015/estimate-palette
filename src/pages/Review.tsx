@@ -155,7 +155,7 @@ export default function Review() {
                 {/* Header */}
                 <div className="flex justify-between items-start mb-6 pb-4 border-b border-border">
                   <div>
-                    <span className="text-xl font-bold text-foreground tracking-tight">LLOYDK</span>
+                    <span className="text-xl font-bold text-foreground tracking-tight">{APP_CONFIG.name}</span>
                     <div className="mt-3">
                       <h2 className="text-base font-bold text-foreground">{sheet.projectName}</h2>
                       <p className="text-sm text-muted-foreground mt-0.5">{sheet.client}</p>
