@@ -92,7 +92,7 @@ export function CostTable({
               </td>
               <td className="px-2 py-2 text-xs">{li.module}</td>
               <td className="px-2 py-2 text-xs">{li.workType}</td>
-              <td className="px-2 py-2 text-right" onDoubleClick={() => handleDoubleClick(li.id, 'effort', li.effort)}>
+              <td className="px-2 py-2 text-right pr-4" onDoubleClick={() => handleDoubleClick(li.id, 'effort', li.effort)}>
                 {editingCell === `${li.id}-effort` ? (
                   <input
                     type="number"
@@ -108,7 +108,7 @@ export function CostTable({
                   <span className="text-sm font-medium">{li.effort.toFixed(1)}</span>
                 )}
               </td>
-              <td className="px-2 py-2 text-xs">{li.role} ({li.grade})</td>
+              <td className="px-2 py-2 text-xs pl-4">{li.role} ({li.grade})</td>
               <td className="px-2 py-2 text-right text-sm">{li.unitCost.toLocaleString()}</td>
               <td className="px-2 py-2 text-right text-sm font-medium">{li.cost.toLocaleString()}</td>
               <td className="px-2 py-2 text-center">
