@@ -298,7 +298,7 @@ export function AppSidebar({ rfpDoc }: AppSidebarProps) {
 
         {/* 진행 단계 — 항상 표시, RFP 미업로드 시 비활성 */}
         {projectId && (
-          <div className={`px-4 pb-6 border-t border-[hsl(var(--sidebar-hover))] pt-4 ${!showProgress ? 'opacity-40' : ''}`}>
+          <div className={`px-4 pb-6 border-t border-[hsl(var(--sidebar-hover))] pt-4 ${!showProgress ? 'opacity-60' : ''}`}>
             <div className="text-xs text-[hsl(var(--sidebar-muted))] mb-3 uppercase tracking-wider">진행 단계</div>
             <div className="space-y-2">
               {projectSteps.map((s) => (
