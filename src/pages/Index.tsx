@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+
 import { AppLayout } from '@/components/AppLayout';
 import { mockReferenceData } from '@/data';
 import type { ReferenceData } from '@/types/reference';
@@ -29,7 +29,7 @@ function deepClone<T>(obj: T): T {
 }
 
 export default function Index() {
-  const navigate = useNavigate();
+  
   // TODO: API 연동 시 아래로 교체
   // const { data } = await fetch('/api/reference').then(r => r.json());
   const [data, setData] = useState<ReferenceData>(() => deepClone(mockReferenceData));
