@@ -95,7 +95,7 @@ export function AppSidebar({ currentStep = 1, rfpDoc }: AppSidebarProps) {
                   s.step === currentStep
                     ? 'bg-[hsl(var(--sidebar-active))] text-[hsl(var(--sidebar-fg))]'
                     : s.step < currentStep
-                    ? 'bg-emerald-500 text-[hsl(var(--sidebar-fg))]'
+                    ? 'bg-status-confirmed text-[hsl(var(--sidebar-fg))]'
                     : 'bg-[hsl(var(--sidebar-hover))] text-[hsl(var(--sidebar-muted))]'
                 }`}
               >
