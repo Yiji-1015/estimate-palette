@@ -335,7 +335,7 @@ export default function Review() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5 text-orange-500" /> 추정 항목 안내
+              <AlertTriangle className="w-5 h-5 text-status-warning" /> 추정 항목 안내
             </AlertDialogTitle>
             <AlertDialogDescription>
               추정 상태인 항목이 {estimatedCount}건 있습니다. 확정 전 검토를 권장합니다.
