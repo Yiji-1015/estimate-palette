@@ -7,7 +7,7 @@ interface AppLayoutProps {
   rfpDoc?: RfpDocInfo | null;
 }
 
-export function AppLayout({ children, currentStep = 1, rfpDoc }: AppLayoutProps) {
+export function AppLayout({ children, currentStep, rfpDoc }: AppLayoutProps) {
   return (
     <div className="flex min-h-screen w-full">
       <AppSidebar currentStep={currentStep} rfpDoc={rfpDoc} />
