@@ -7,6 +7,7 @@ import Index from "./pages/Index.tsx";
 import RfpAnalysis from "./pages/RfpAnalysis.tsx";
 import Estimation from "./pages/Estimation.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import Review from "./pages/Review.tsx";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/rfp-analysis" element={<RfpAnalysis />} />
           <Route path="/estimation" element={<Estimation />} />
+          <Route path="/review" element={<Review />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
