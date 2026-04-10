@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { APP_CONFIG } from '@/config/app';
 import { AppLayout } from '@/components/AppLayout';
-import { useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -39,8 +39,8 @@ const scenarioSheets: Record<string, EstimateSheet> = {
 };
 
 export default function Review() {
-  const [searchParams] = useSearchParams();
-  const rfpKey = searchParams.get('rfpId') ?? 'default';
+  const { projectId } = useParams();
+  const rfpKey = projectId ?? 'default';
   const [scenarioKey, setScenarioKey] = useState<string>(SCENARIO_NAMES.recommended);
   const [sheet, setSheet] = useState<EstimateSheet>({ ...mockEstimateSheet });
   const [selectedItem, setSelectedItem] = useState<EstimateLineItem | null>(null);

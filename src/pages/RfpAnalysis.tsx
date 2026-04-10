@@ -3,7 +3,7 @@ import { AppLayout } from '@/components/AppLayout';
 import { UploadStep } from '@/components/rfp/UploadStep';
 import { ScanStep } from '@/components/rfp/ScanStep';
 import { RequirementsStep } from '@/components/rfp/RequirementsStep';
-import { useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { mockRfpAnalysis } from '@/data';
 import type { RfpAnalysisData } from '@/types/rfpAnalysis';
 import type { RfpDocInfo } from '@/components/AppSidebar';
@@ -16,8 +16,8 @@ import { Check } from 'lucide-react';
 const subSteps = ['문서 업로드', 'AI 분석', '요구사항 확인'];
 
 export default function RfpAnalysis() {
-  const [searchParams] = useSearchParams();
-  const rfpKey = searchParams.get('rfpId') ?? 'default';
+  const { projectId } = useParams();
+  const rfpKey = projectId ?? 'default';
   const [currentSubStep, setCurrentSubStep] = useState(0);
   const [analysisData, setAnalysisData] = useState<RfpAnalysisData>(() =>
     JSON.parse(JSON.stringify(mockRfpAnalysis))
