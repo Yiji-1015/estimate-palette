@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { AppLayout } from '@/components/AppLayout';
 import { mockReferenceData } from '@/data';
 import type { ReferenceData } from '@/types/reference';
-import { ModuleAccordion, EditableNumberCell, EditableTextCell } from '@/components/reference/EffortBaselineTab';
+import { ModuleAccordion } from '@/components/reference/EffortBaselineTab';
+import { SiCommonTable } from '@/components/reference/SiCommonTable';
+import { OverheadTable } from '@/components/reference/OverheadTable';
 import { SolutionModulesTab } from '@/components/reference/SolutionModulesTab';
 import { AdjustmentFactorsTab } from '@/components/reference/AdjustmentFactorsTab';
 import { RateCardTab } from '@/components/reference/RateCardTab';
@@ -12,7 +14,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { toast } from 'sonner';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus } from 'lucide-react';
 
 const tabs = [
   { id: 'effort', label: '기준공수표' },
