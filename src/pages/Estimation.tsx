@@ -15,6 +15,7 @@ import type { ChatMessage, InteractionBlock, EstimationPhase, ModuleMappingData,
 import { mockFollowUpMessages } from '@/data';
 import { saveEstimationState, loadEstimationState, getDefaultEstimationState } from '@/stores/estimationStore';
 import { ESTIMATION_PHASE_ORDER } from '@/config/constants';
+import { getRfpDoc } from '@/stores/rfpStore';
 
 // TODO: API 연동 시 아래로 교체
 // POST /api/estimation/:rfpId/start → 견적 산정 시작
