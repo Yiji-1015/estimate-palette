@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { AppLayout } from '@/components/AppLayout';
 import { UploadStep } from '@/components/rfp/UploadStep';
 import { ScanStep } from '@/components/rfp/ScanStep';
@@ -6,6 +6,7 @@ import { RequirementsStep } from '@/components/rfp/RequirementsStep';
 import { mockRfpAnalysis } from '@/data';
 import type { RfpAnalysisData } from '@/types/rfpAnalysis';
 import type { RfpDocInfo } from '@/components/AppSidebar';
+import { setRfpDoc } from '@/stores/rfpStore';
 import { Check } from 'lucide-react';
 
 // TODO: API 연동 시 아래로 교체
@@ -47,6 +48,11 @@ export default function RfpAnalysis() {
       status: statusMap[currentSubStep] ?? '업로드 전',
     };
   }, [currentSubStep, analysisData]);
+
+  // RFP 정보를 전역 store에 저장 → Step 3, 4에서도 사이드바에 표시
+  useEffect(() => {
+    setRfpDoc(rfpDoc);
+  }, [rfpDoc]);
 
   return (
     <AppLayout currentStep={2} rfpDoc={rfpDoc}>
