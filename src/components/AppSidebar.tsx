@@ -1,4 +1,5 @@
 import { ClipboardList, FileText, MessageSquare, CheckCircle, FileUp } from 'lucide-react';
+import { APP_CONFIG } from '@/config/app';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const navItems = [
