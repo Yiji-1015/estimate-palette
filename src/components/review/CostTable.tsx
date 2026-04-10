@@ -51,15 +51,15 @@ export function CostTable({
     <div className="overflow-x-auto">
       <table className="w-full text-sm table-fixed">
         <colgroup>
-          <col style={{ width: '4%' }} />
-          <col style={{ width: '18%' }} />
+          <col style={{ width: '3%' }} />
+          <col style={{ width: '17%' }} />
           <col style={{ width: '10%' }} />
+          <col style={{ width: '9%' }} />
+          <col style={{ width: '9%' }} />
+          <col style={{ width: '14%' }} />
           <col style={{ width: '10%' }} />
-          <col style={{ width: '10%' }} />
-          <col style={{ width: '12%' }} />
           <col style={{ width: '11%' }} />
-          <col style={{ width: '12%' }} />
-          <col style={{ width: '8%' }} />
+          <col style={{ width: '7%' }} />
         </colgroup>
         <thead>
           <tr className="border-b-2 border-foreground/20">
@@ -67,8 +67,8 @@ export function CostTable({
             <th className="px-2 py-2 text-left text-xs font-semibold text-muted-foreground">요구사항</th>
             <th className="px-2 py-2 text-left text-xs font-semibold text-muted-foreground">모듈</th>
             <th className="px-2 py-2 text-left text-xs font-semibold text-muted-foreground">작업유형</th>
-            <th className="px-2 py-2 text-right text-xs font-semibold text-muted-foreground">공수(M/M)</th>
-            <th className="px-2 py-2 text-left text-xs font-semibold text-muted-foreground">역할</th>
+            <th className="px-2 py-2 text-right text-xs font-semibold text-muted-foreground pr-4">공수(M/M)</th>
+            <th className="px-2 py-2 text-left text-xs font-semibold text-muted-foreground pl-4">역할</th>
             <th className="px-2 py-2 text-right text-xs font-semibold text-muted-foreground">단가(만원)</th>
             <th className="px-2 py-2 text-right text-xs font-semibold text-muted-foreground">비용(만원)</th>
             <th className="px-2 py-2 text-center text-xs font-semibold text-muted-foreground">상태</th>
@@ -92,7 +92,7 @@ export function CostTable({
               </td>
               <td className="px-2 py-2 text-xs">{li.module}</td>
               <td className="px-2 py-2 text-xs">{li.workType}</td>
-              <td className="px-2 py-2 text-right" onDoubleClick={() => handleDoubleClick(li.id, 'effort', li.effort)}>
+              <td className="px-2 py-2 text-right pr-4" onDoubleClick={() => handleDoubleClick(li.id, 'effort', li.effort)}>
                 {editingCell === `${li.id}-effort` ? (
                   <input
                     type="number"
@@ -108,7 +108,7 @@ export function CostTable({
                   <span className="text-sm font-medium">{li.effort.toFixed(1)}</span>
                 )}
               </td>
-              <td className="px-2 py-2 text-xs">{li.role} ({li.grade})</td>
+              <td className="px-2 py-2 text-xs pl-4">{li.role} ({li.grade})</td>
               <td className="px-2 py-2 text-right text-sm">{li.unitCost.toLocaleString()}</td>
               <td className="px-2 py-2 text-right text-sm font-medium">{li.cost.toLocaleString()}</td>
               <td className="px-2 py-2 text-center">
