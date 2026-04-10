@@ -37,7 +37,7 @@ const scenarioSheets: Record<string, EstimateSheet> = {
 };
 
 export default function Review() {
-  const [scenarioKey, setScenarioKey] = useState(SCENARIO_NAMES.recommended);
+  const [scenarioKey, setScenarioKey] = useState<string>(SCENARIO_NAMES.recommended);
   const [sheet, setSheet] = useState<EstimateSheet>({ ...mockEstimateSheet });
   const [selectedItem, setSelectedItem] = useState<EstimateLineItem | null>(null);
   const [isConfirmed, setIsConfirmed] = useState(false);
