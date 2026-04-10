@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { AppLayout } from '@/components/AppLayout';
-import { useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { EstimationProgressBar } from '@/components/estimation/EstimationProgressBar';
 import { ContextPanel } from '@/components/estimation/ContextPanel';
 import { ModuleMappingBlock } from '@/components/estimation/ModuleMappingBlock';
@@ -24,8 +24,8 @@ import { getRfpDoc } from '@/stores/rfpStore';
 // POST /api/estimation/:rfpId/confirm → 시나리오 확정 → Step 4 진행 가능
 
 export default function Estimation() {
-  const [searchParams] = useSearchParams();
-  const estimationStateKey = searchParams.get('rfpId') ?? 'default';
+  const { projectId } = useParams();
+  const estimationStateKey = projectId ?? 'default';
   const saved = loadEstimationState(estimationStateKey);
   const initial = saved ?? getDefaultEstimationState();
 

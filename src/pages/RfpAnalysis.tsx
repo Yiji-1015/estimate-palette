@@ -16,8 +16,8 @@ import { Check } from 'lucide-react';
 const subSteps = ['문서 업로드', 'AI 분석', '요구사항 확인'];
 
 export default function RfpAnalysis() {
-  const [searchParams] = useSearchParams();
-  const rfpKey = searchParams.get('rfpId') ?? 'default';
+  const { projectId } = useParams();
+  const rfpKey = projectId ?? 'default';
   const [currentSubStep, setCurrentSubStep] = useState(0);
   const [analysisData, setAnalysisData] = useState<RfpAnalysisData>(() =>
     JSON.parse(JSON.stringify(mockRfpAnalysis))

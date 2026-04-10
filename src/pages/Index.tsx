@@ -64,7 +64,7 @@ export default function Index() {
     setConfirmOpen(false);
     handleSave();
     toast.success('기준자료 확정', { description: 'Step 2로 이동합니다.' });
-    navigate('/rfp-analysis');
+    toast.info('기준자료가 확정되었습니다. 프로젝트를 선택해 주세요.');
     // TODO: API 연동 시 아래로 교체
     // await fetch('/api/reference/confirm', { method: 'POST' });
   };
@@ -73,7 +73,7 @@ export default function Index() {
     if (hasChanges) {
       setConfirmOpen(true);
     } else {
-      navigate('/rfp-analysis');
+      toast.info('기준자료가 확정되었습니다. 프로젝트를 선택해 주세요.');
     }
   };
 
