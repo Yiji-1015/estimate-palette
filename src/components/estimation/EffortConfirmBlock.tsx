@@ -25,15 +25,23 @@ export function EffortConfirmBlock({ data, confirmed, onConfirm }: Props) {
   return (
     <div className="mt-3 border border-border rounded-lg bg-card overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full text-sm table-fixed">
+        <table className="w-full text-sm">
+          <colgroup>
+            <col style={{ width: '25%' }} />
+            <col style={{ width: '10%' }} />
+            <col style={{ width: '10%' }} />
+            <col style={{ width: '8%' }} />
+            <col style={{ width: '9%' }} />
+            <col style={{ width: '38%' }} />
+          </colgroup>
           <thead>
             <tr className="border-b border-border bg-muted/50">
-              <th className="px-3 py-2 text-left font-medium text-muted-foreground text-xs w-[28%]">요구사항</th>
-              <th className="px-3 py-2 text-left font-medium text-muted-foreground text-xs w-[12%]">모듈</th>
-              <th className="px-3 py-2 text-left font-medium text-muted-foreground text-xs w-[12%]">작업유형</th>
-              <th className="px-3 py-2 text-right font-medium text-muted-foreground text-xs w-[8%]">기준</th>
-              <th className="px-3 py-2 text-right font-medium text-muted-foreground text-xs w-[10%]">조정</th>
-              <th className="px-3 py-2 text-left font-medium text-muted-foreground text-xs w-[30%]">산출식</th>
+              <th className="px-3 py-2 text-left font-medium text-muted-foreground text-xs">요구사항</th>
+              <th className="px-3 py-2 text-left font-medium text-muted-foreground text-xs">모듈</th>
+              <th className="px-3 py-2 text-left font-medium text-muted-foreground text-xs">작업유형</th>
+              <th className="px-3 py-2 text-right font-medium text-muted-foreground text-xs">기준</th>
+              <th className="px-3 py-2 text-right font-medium text-muted-foreground text-xs pr-4">조정</th>
+              <th className="px-3 py-2 text-left font-medium text-muted-foreground text-xs pl-4">산출식</th>
             </tr>
           </thead>
           <tbody>
