@@ -45,6 +45,13 @@
     --warning-dot: 25 95% 53%;
     --highlight-row: 217 91% 97%;
 
+    --status-confirmed: 142 71% 45%;
+    --status-confirmed-foreground: 142 76% 36%;
+    --status-confirmed-bg: 142 76% 94%;
+    --status-estimated-foreground: 217 91% 60%;
+    --status-estimated-bg: 217 91% 96%;
+    --status-warning: 25 95% 53%;
+
     --sidebar-background: 240 33% 14%;
     --sidebar-foreground: 0 0% 100%;
     --sidebar-primary: 217 91% 60%;

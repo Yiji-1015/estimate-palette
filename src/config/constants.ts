@@ -101,3 +101,23 @@ export const CATEGORY_MODULE_MAPPING = [
 
 export const ESTIMATE_STATUSES = ['추정', '확인', '확정'] as const;
 export type EstimateStatus = (typeof ESTIMATE_STATUSES)[number];
+
+/* ─── 견적 산정 페이즈 ─── */
+
+export const ESTIMATION_PHASE_ORDER = ['mapping', 'factors', 'effort', 'cost', 'scenario'] as const;
+
+export const ESTIMATION_PHASE_LABELS: Record<string, string> = {
+  mapping: '솔루션 매핑',
+  factors: '조정계수',
+  effort: '공수 산정',
+  cost: '비용 계산',
+  scenario: '시나리오',
+};
+
+/* ─── 시나리오 이름 ─── */
+
+export const SCENARIO_NAMES = {
+  minimal: '필수충족안',
+  recommended: '권장안',
+  extended: '확장안',
+} as const;
