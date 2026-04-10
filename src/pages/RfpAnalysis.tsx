@@ -3,7 +3,7 @@ import { AppLayout } from '@/components/AppLayout';
 import { UploadStep } from '@/components/rfp/UploadStep';
 import { ScanStep } from '@/components/rfp/ScanStep';
 import { RequirementsStep } from '@/components/rfp/RequirementsStep';
-import { mockRfpAnalysis } from '@/data/mockRfpAnalysis';
+import { mockRfpAnalysis } from '@/data';
 import type { RfpAnalysisData } from '@/types/rfpAnalysis';
 import type { RfpDocInfo } from '@/components/AppSidebar';
 import { Check } from 'lucide-react';

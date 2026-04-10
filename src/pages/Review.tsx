@@ -22,7 +22,7 @@ import {
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Download, ChevronDown, ChevronRight, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { toast } from 'sonner';
-import { mockEstimateSheet, mockMinimalSheet, mockExtendedSheet, mockEvidenceMap } from '@/data/mockReview';
+import { mockEstimateSheet, mockMinimalSheet, mockExtendedSheet, mockEvidenceMap } from '@/data';
 import { CostTable } from '@/components/review/CostTable';
 import { GanttChart } from '@/components/review/GanttChart';
 import { EvidencePanel, ModulePieChart } from '@/components/review/EvidencePanel';

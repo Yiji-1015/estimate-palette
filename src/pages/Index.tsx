@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppLayout } from '@/components/AppLayout';
-import { mockReferenceData } from '@/data/mockReferenceData';
+import { mockReferenceData } from '@/data';
 import type { ReferenceData } from '@/types/reference';
 import { ModuleAccordion, EditableNumberCell, EditableTextCell } from '@/components/reference/EffortBaselineTab';
 import { SolutionModulesTab } from '@/components/reference/SolutionModulesTab';
