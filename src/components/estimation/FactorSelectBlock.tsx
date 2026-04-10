@@ -83,7 +83,7 @@ export function FactorSelectBlock({ data, confirmed, onConfirm, onChange }: Prop
         </div>
       )}
       {confirmed && (
-        <div className="p-3 border-t border-border bg-muted/30 text-center text-sm text-emerald-600 font-medium">
+        <div className="p-3 border-t border-border bg-muted/30 text-center text-sm text-status-confirmed-foreground font-medium">
           ✅ 계수 확인 완료
         </div>
       )}

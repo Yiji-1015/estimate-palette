@@ -262,7 +262,7 @@ export default function Review() {
                             <tr key={r.id} className="border-b border-border">
                               <td className="px-2 py-1.5 text-sm">{r.description}</td>
                               <td className="px-2 py-1.5 text-center">
-                                <Badge variant="outline" className={`text-[10px] ${r.impact === '상' ? 'border-destructive text-destructive' : 'border-orange-400 text-orange-600'}`}>
+                                <Badge variant="outline" className={`text-[10px] ${r.impact === '상' ? 'border-destructive text-destructive' : 'border-status-warning text-status-warning'}`}>
                                   {r.impact}
                                 </Badge>
                               </td>
