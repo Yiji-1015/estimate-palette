@@ -3,6 +3,7 @@ import { AppLayout } from '@/components/AppLayout';
 import { UploadStep } from '@/components/rfp/UploadStep';
 import { ScanStep } from '@/components/rfp/ScanStep';
 import { RequirementsStep } from '@/components/rfp/RequirementsStep';
+import { useSearchParams } from 'react-router-dom';
 import { mockRfpAnalysis } from '@/data';
 import type { RfpAnalysisData } from '@/types/rfpAnalysis';
 import type { RfpDocInfo } from '@/components/AppSidebar';
@@ -15,6 +16,8 @@ import { Check } from 'lucide-react';
 const subSteps = ['문서 업로드', 'AI 분석', '요구사항 확인'];
 
 export default function RfpAnalysis() {
+  const [searchParams] = useSearchParams();
+  const rfpKey = searchParams.get('rfpId') ?? 'default';
   const [currentSubStep, setCurrentSubStep] = useState(0);
   const [analysisData, setAnalysisData] = useState<RfpAnalysisData>(() =>
     JSON.parse(JSON.stringify(mockRfpAnalysis))
@@ -51,8 +54,8 @@ export default function RfpAnalysis() {
 
   // RFP 정보를 전역 store에 저장 → Step 3, 4에서도 사이드바에 표시
   useEffect(() => {
-    setRfpDoc(rfpDoc);
-  }, [rfpDoc]);
+    setRfpDoc(rfpDoc, rfpKey);
+  }, [rfpDoc, rfpKey]);
 
   return (
     <AppLayout currentStep={2} rfpDoc={rfpDoc}>

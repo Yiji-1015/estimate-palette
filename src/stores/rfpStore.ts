@@ -9,12 +9,16 @@
 
 import type { RfpDocInfo } from '@/components/AppSidebar';
 
-let currentRfpDoc: RfpDocInfo | null = null;
+const rfpDocsByKey = new Map<string, RfpDocInfo>();
 
-export function setRfpDoc(doc: RfpDocInfo | null) {
-  currentRfpDoc = doc;
+export function setRfpDoc(doc: RfpDocInfo | null, key = 'default') {
+  if (!doc) {
+    rfpDocsByKey.delete(key);
+    return;
+  }
+  rfpDocsByKey.set(key, doc);
 }
 
-export function getRfpDoc(): RfpDocInfo | null {
-  return currentRfpDoc;
+export function getRfpDoc(key = 'default'): RfpDocInfo | null {
+  return rfpDocsByKey.get(key) ?? null;
 }

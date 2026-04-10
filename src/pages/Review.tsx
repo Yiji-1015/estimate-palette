@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { APP_CONFIG } from '@/config/app';
 import { AppLayout } from '@/components/AppLayout';
+import { useSearchParams } from 'react-router-dom';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -38,6 +39,8 @@ const scenarioSheets: Record<string, EstimateSheet> = {
 };
 
 export default function Review() {
+  const [searchParams] = useSearchParams();
+  const rfpKey = searchParams.get('rfpId') ?? 'default';
   const [scenarioKey, setScenarioKey] = useState<string>(SCENARIO_NAMES.recommended);
   const [sheet, setSheet] = useState<EstimateSheet>({ ...mockEstimateSheet });
   const [selectedItem, setSelectedItem] = useState<EstimateLineItem | null>(null);
@@ -103,8 +106,16 @@ export default function Review() {
   const totalEffort = sheet.lineItems.reduce((s, li) => s + li.effort, 0) +
     sheet.overheadItems.reduce((s, o) => s + o.effort, 0);
 
+  const baseRfpDoc = getRfpDoc(rfpKey);
+  const sidebarRfpDoc = {
+    fileName: baseRfpDoc?.fileName ?? `${sheet.projectName}.pdf`,
+    client: baseRfpDoc?.client ?? sheet.client,
+    docType: baseRfpDoc?.docType ?? 'RFP',
+    status: isConfirmed ? '확정' : '리뷰 중',
+  } as const;
+
   return (
-    <AppLayout currentStep={4} rfpDoc={getRfpDoc() ?? { fileName: `${sheet.projectName}.pdf`, client: sheet.client, docType: 'RFP', status: isConfirmed ? '확정' : '리뷰 중' }}>
+    <AppLayout currentStep={4} rfpDoc={sidebarRfpDoc}>
       <div className="flex flex-col h-screen">
         {/* Top bar */}
         <div className="flex items-center justify-between px-6 py-3 border-b border-border bg-card">
