@@ -98,9 +98,9 @@ export function AppSidebar({ rfpDoc }: AppSidebarProps) {
     ? (projectSteps.find((s) => location.pathname.includes(s.path))?.step ?? 0)
     : 0;
 
-  // 현재 프로젝트가 RFP 업로드 완료인지
+  // 프로젝트가 선택되어 있으면 진행 단계 활성화
   const currentProject = projectId ? getProject(projectId) : undefined;
-  const showProgress = projectId && currentProject?.rfpUploaded;
+  const showProgress = !!projectId && !!currentProject;
 
   const refreshProjects = () => setProjects(getProjects());
 
