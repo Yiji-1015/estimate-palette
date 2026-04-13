@@ -27,7 +27,7 @@ export function ModulePieChart({ lineItems }: ModuleChartProps) {
   return (
     <div>
       <h4 className="text-sm font-medium text-foreground mb-3">모듈별 공수 비율</h4>
-      <div className="w-full aspect-square max-h-[400px]">
+      <div className="w-full aspect-square max-w-[600px] mx-auto">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie data={data} cx="50%" cy="50%" innerRadius="25%" outerRadius="45%" dataKey="value" nameKey="name" label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} labelLine={false} fontSize={11}>
