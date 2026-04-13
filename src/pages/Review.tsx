@@ -294,7 +294,7 @@ export default function Review() {
               {selectedItem ? (
                 <EvidencePanel selectedItem={selectedItem} evidence={evidence} />
               ) : (
-                <div className="flex flex-col items-center justify-center h-full text-center px-6">
+                <div className="flex flex-col items-center justify-center h-full text-center px-6 w-full">
                   <div className="text-muted-foreground text-sm mb-8">
                     좌측 견적서에서 항목을 클릭하면<br />상세 근거를 확인할 수 있습니다
                   </div>
